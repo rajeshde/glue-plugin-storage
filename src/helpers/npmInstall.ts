@@ -1,5 +1,5 @@
 const { SpawnHelper } = require("@gluestack/helpers");
-import { PluginInstance } from "src/PluginInstance";
+import { PluginInstance } from "../PluginInstance";
 
 function installScript() {
   return ["npm", "install"];

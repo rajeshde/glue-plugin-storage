@@ -1,6 +1,7 @@
 const { SpawnHelper, DockerodeHelper } = require("@gluestack/helpers");
 import IApp from "@gluestack/framework/types/app/interface/IApp";
 import IContainerController from "@gluestack/framework/types/plugin/interface/IContainerController";
+import { generateDockerfile } from "./create-dockerfile";
 import { PluginInstance } from "./PluginInstance";
 const { GlobalEnv } = require("@gluestack/helpers");
 
@@ -39,7 +40,7 @@ export class PluginInstanceContainerController implements IContainerController {
   }
 
   runScript() {
-    return ["npm", "run", "start:dev", this.getPortNumber()];
+    return ["npm", "run", "dev", this.getPortNumber()];
   }
 
   async getEnv() {
@@ -52,6 +53,11 @@ export class PluginInstanceContainerController implements IContainerController {
     for (const key in minioEnv) {
       env[key] = await this.getFromGlobalEnv(key, minioEnv[key]);
     }
+
+    env.APP_PORT = await this.getFromGlobalEnv(
+      "APP_PORT",
+      this.getPortNumber(true).toString(),
+    );
 
     return env;
   }
@@ -211,6 +217,6 @@ export class PluginInstanceContainerController implements IContainerController {
   }
 
   async build() {
-    //
+    await generateDockerfile(this.callerInstance.getInstallationPath());
   }
 }

@@ -7,4 +7,4 @@ const express_1 = __importDefault(require("./providers/express"));
 /**
  * Start the server
  */
-express_1.default.init(process.argv[2]);
+express_1.default.init();

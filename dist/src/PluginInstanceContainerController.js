@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.PluginInstanceContainerController = void 0;
 var _a = require("@gluestack/helpers"), SpawnHelper = _a.SpawnHelper, DockerodeHelper = _a.DockerodeHelper;
+var create_dockerfile_1 = require("./create-dockerfile");
 var GlobalEnv = require("@gluestack/helpers").GlobalEnv;
 var PluginInstanceContainerController = (function () {
     function PluginInstanceContainerController(app, callerInstance) {
@@ -73,13 +74,13 @@ var PluginInstanceContainerController = (function () {
         return ["npm", "install"];
     };
     PluginInstanceContainerController.prototype.runScript = function () {
-        return ["npm", "run", "start:dev", this.getPortNumber()];
+        return ["npm", "run", "dev", this.getPortNumber()];
     };
     PluginInstanceContainerController.prototype.getEnv = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var minioEnv, env, _a, _b, _c, _i, key, _d, _e;
-            return __generator(this, function (_f) {
-                switch (_f.label) {
+            var minioEnv, env, _a, _b, _c, _i, key, _d, _e, _f;
+            return __generator(this, function (_g) {
+                switch (_g.label) {
                     case 0:
                         minioEnv = this.callerInstance
                             .getMinioInstance()
@@ -91,7 +92,7 @@ var PluginInstanceContainerController = (function () {
                         for (_c in _a)
                             _b.push(_c);
                         _i = 0;
-                        _f.label = 1;
+                        _g.label = 1;
                     case 1:
                         if (!(_i < _b.length)) return [3, 4];
                         _c = _b[_i];
@@ -101,12 +102,17 @@ var PluginInstanceContainerController = (function () {
                         _e = key;
                         return [4, this.getFromGlobalEnv(key, minioEnv[key])];
                     case 2:
-                        _d[_e] = _f.sent();
-                        _f.label = 3;
+                        _d[_e] = _g.sent();
+                        _g.label = 3;
                     case 3:
                         _i++;
                         return [3, 1];
-                    case 4: return [2, env];
+                    case 4:
+                        _f = env;
+                        return [4, this.getFromGlobalEnv("APP_PORT", this.getPortNumber(true).toString())];
+                    case 5:
+                        _f.APP_PORT = _g.sent();
+                        return [2, env];
                 }
             });
         });
@@ -249,7 +255,12 @@ var PluginInstanceContainerController = (function () {
     PluginInstanceContainerController.prototype.build = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2];
+                switch (_a.label) {
+                    case 0: return [4, (0, create_dockerfile_1.generateDockerfile)(this.callerInstance.getInstallationPath())];
+                    case 1:
+                        _a.sent();
+                        return [2];
+                }
             });
         });
     };

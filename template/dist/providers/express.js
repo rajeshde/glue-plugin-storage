@@ -31,7 +31,8 @@ class Express {
     /**
      * Start the express server
      */
-    init(port) {
+    init() {
+        const port = locals_1.default.config().port;
         // Start the server on the specified port
         this.express
             .listen(port, () => {

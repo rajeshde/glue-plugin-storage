@@ -9,6 +9,7 @@ class Locals {
   public static config(): any {
     dotenv.config({ path: path.join(__dirname, "../../.env") });
 
+    const port = process.env.APP_PORT || "";
     const endPoint = process.env.MINIO_END_POINT || "";
     const minioPort = process.env.MINIO_PORT || "";
     const useSSL = process.env.MINIO_USE_SSL || "";
@@ -18,6 +19,7 @@ class Locals {
     const tokenTimeout = process.env.MINIO_TOKEN_TIMEOUT || "";
 
     return {
+      port,
       endPoint,
       minioPort,
       useSSL,

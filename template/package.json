@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "tsc --project './tsconfig.json' --watch & NODE_ENV=development nodemon dist",
-    "start:server": "tsc && node dist",
+    "dev": "tsc --project './tsconfig.json' --watch & NODE_ENV=development nodemon dist",
+    "build": "tsc",
+    "start": "tsc && node dist",
     "lint": "./node_modules/.bin/tslint -c tslint.json 'src/**/*.ts?(x)'"
   },
   "keywords": [],
