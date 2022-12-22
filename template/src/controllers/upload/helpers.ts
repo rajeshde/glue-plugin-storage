@@ -8,7 +8,7 @@ class Helpers {
   public minioClient() {
     return new Minio.Client({
       endPoint: Locals.config().endPoint,
-      port: Locals.config().minioPort,
+      port: parseInt(Locals.config().minioPort),
       useSSL: Locals.config().useSSL === "true",
       accessKey: Locals.config().accessKey,
       secretKey: Locals.config().secretKey,

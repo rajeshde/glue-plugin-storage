@@ -12,7 +12,7 @@ class Helpers {
     minioClient() {
         return new Minio.Client({
             endPoint: locals_1.default.config().endPoint,
-            port: locals_1.default.config().minioPort,
+            port: parseInt(locals_1.default.config().minioPort),
             useSSL: locals_1.default.config().useSSL === "true",
             accessKey: locals_1.default.config().accessKey,
             secretKey: locals_1.default.config().secretKey,

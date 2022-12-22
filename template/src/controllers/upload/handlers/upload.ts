@@ -20,12 +20,22 @@ class Upload {
           return res.status(500).send(err);
         }
 
-        // Return a response to the client
-        return res.send({
-          message: "File uploaded successfully",
-          status: 200,
-          file: file,
-        });
+        client.presignedUrl(
+          "GET",
+          Locals.config().bucket,
+          file.originalname,
+          parseInt(Locals.config().tokenTimeout),
+          function (err: any, presignedUrl: string) {
+            if (err) return console.log(err);
+            // Return a response to the client
+            return res.send({
+              message: "File uploaded successfully",
+              status: 200,
+              etag: etag,
+              presignedUrl: presignedUrl.split("?")[0],
+            });
+          },
+        );
       },
     );
   }
