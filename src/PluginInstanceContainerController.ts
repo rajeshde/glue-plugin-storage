@@ -40,7 +40,7 @@ export class PluginInstanceContainerController implements IContainerController {
   }
 
   runScript() {
-    return ["npm", "run", "dev", this.getPortNumber()];
+    return ["npm", "run", "dev"];
   }
 
   async getEnv() {
@@ -75,7 +75,12 @@ export class PluginInstanceContainerController implements IContainerController {
       return this.portNumber;
     }
     if (returnDefault) {
-      return 7010;
+      let ports =
+        this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
+      let port = ports.length ? parseInt(ports[ports.length - 1]) + 1 : 7010;
+      ports.push(port);
+      this.callerInstance.callerPlugin.gluePluginStore.set("ports", ports);
+      return port;
     }
   }
 
@@ -127,55 +132,39 @@ export class PluginInstanceContainerController implements IContainerController {
           ?.up();
       }
 
-      let ports =
-        this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
-
       await new Promise(async (resolve, reject) => {
-        DockerodeHelper.getPort(this.getPortNumber(true), ports)
-          .then((port: number) => {
-            this.portNumber = port;
+        console.log("\x1b[33m");
+        console.log(
+          `${this.callerInstance.getName()}: Running "${this.installScript().join(
+            " ",
+          )}"`,
+          "\x1b[0m",
+        );
+        SpawnHelper.run(
+          this.callerInstance.getInstallationPath(),
+          this.installScript(),
+        )
+          .then(() => {
             console.log("\x1b[33m");
             console.log(
-              `${this.callerInstance.getName()}: Running "${this.installScript().join(
+              `${this.callerInstance.getName()}: Running "${this.runScript().join(
                 " ",
               )}"`,
               "\x1b[0m",
             );
-            SpawnHelper.run(
+            SpawnHelper.start(
               this.callerInstance.getInstallationPath(),
-              this.installScript(),
+              this.runScript(),
             )
-              .then(() => {
-                console.log("\x1b[33m");
+              .then(({ processId }: { processId: string }) => {
+                this.setStatus("up");
+                this.setContainerId(processId);
+                console.log("\x1b[32m");
                 console.log(
-                  `${this.callerInstance.getName()}: Running "${this.runScript().join(
-                    " ",
-                  )}"`,
-                  "\x1b[0m",
+                  `Use http://localhost:${this.getPortNumber()}/upload as your storage endpoint`,
                 );
-                SpawnHelper.start(
-                  this.callerInstance.getInstallationPath(),
-                  this.runScript(),
-                )
-                  .then(({ processId }: { processId: string }) => {
-                    this.setStatus("up");
-                    this.setPortNumber(this.portNumber);
-                    this.setContainerId(processId);
-                    ports.push(this.portNumber);
-                    this.callerInstance.callerPlugin.gluePluginStore.set(
-                      "ports",
-                      ports,
-                    );
-                    console.log("\x1b[32m");
-                    console.log(
-                      `Use http://localhost:${this.getPortNumber()}/upload as your storage endpoint`,
-                    );
-                    console.log("\x1b[0m");
-                    return resolve(true);
-                  })
-                  .catch((e: any) => {
-                    return reject(e);
-                  });
+                console.log("\x1b[0m");
+                return resolve(true);
               })
               .catch((e: any) => {
                 return reject(e);
@@ -190,22 +179,10 @@ export class PluginInstanceContainerController implements IContainerController {
 
   async down() {
     if (this.getStatus() !== "down") {
-      let ports =
-        this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
       await new Promise(async (resolve, reject) => {
         SpawnHelper.stop(this.getContainerId(), this.callerInstance.getName())
           .then(() => {
             this.setStatus("down");
-            var index = ports.indexOf(this.getPortNumber());
-            if (index !== -1) {
-              ports.splice(index, 1);
-            }
-            this.callerInstance.callerPlugin.gluePluginStore.set(
-              "ports",
-              ports,
-            );
-
-            this.setPortNumber(null);
             this.setContainerId(null);
             return resolve(true);
           })
