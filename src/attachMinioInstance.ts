@@ -42,7 +42,7 @@ export async function attachMinioInstance(
   const instance = await selectMinioInstance(minioInstances);
   if (instance) {
     await setMinioConfig(storageInstance, instance);
-    const env = instance.getContainerController().getEnv();
+    const env = await instance.getContainerController().getEnv();
     await writeEnv(storageInstance, instance, env);
   }
 }

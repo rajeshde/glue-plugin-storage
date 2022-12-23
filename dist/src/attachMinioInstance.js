@@ -80,16 +80,18 @@ function attachMinioInstance(storageInstance, minioInstances) {
                 case 0: return [4, selectMinioInstance(minioInstances)];
                 case 1:
                     instance = _a.sent();
-                    if (!instance) return [3, 4];
+                    if (!instance) return [3, 5];
                     return [4, (0, exports.setMinioConfig)(storageInstance, instance)];
                 case 2:
                     _a.sent();
-                    env = instance.getContainerController().getEnv();
-                    return [4, (0, writeEnv_1.writeEnv)(storageInstance, instance, env)];
+                    return [4, instance.getContainerController().getEnv()];
                 case 3:
+                    env = _a.sent();
+                    return [4, (0, writeEnv_1.writeEnv)(storageInstance, instance, env)];
+                case 4:
                     _a.sent();
-                    _a.label = 4;
-                case 4: return [2];
+                    _a.label = 5;
+                case 5: return [2];
             }
         });
     });
