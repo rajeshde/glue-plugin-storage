@@ -32,7 +32,7 @@ class Upload {
               message: "File uploaded successfully",
               status: 200,
               etag: etag,
-              presignedUrl: presignedUrl.split("?")[0],
+              presignedUrl: presignedUrl,
             });
           },
         );

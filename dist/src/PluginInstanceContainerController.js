@@ -78,9 +78,9 @@ var PluginInstanceContainerController = (function () {
     };
     PluginInstanceContainerController.prototype.getEnv = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var minioEnv, env, _a, _b, _c, _i, key, _d, _e, _f;
-            return __generator(this, function (_g) {
-                switch (_g.label) {
+            var minioEnv, env, _a, _b, _c, _i, key, _d, _e, _f, _g, _h;
+            return __generator(this, function (_j) {
+                switch (_j.label) {
                     case 0:
                         minioEnv = this.callerInstance
                             .getMinioInstance()
@@ -92,7 +92,7 @@ var PluginInstanceContainerController = (function () {
                         for (_c in _a)
                             _b.push(_c);
                         _i = 0;
-                        _g.label = 1;
+                        _j.label = 1;
                     case 1:
                         if (!(_i < _b.length)) return [3, 4];
                         _c = _b[_i];
@@ -102,16 +102,19 @@ var PluginInstanceContainerController = (function () {
                         _e = key;
                         return [4, this.getFromGlobalEnv(key, minioEnv[key])];
                     case 2:
-                        _d[_e] = _g.sent();
-                        _g.label = 3;
+                        _d[_e] = _j.sent();
+                        _j.label = 3;
                     case 3:
                         _i++;
                         return [3, 1];
                     case 4:
                         _f = env;
-                        return [4, this.getFromGlobalEnv("APP_PORT", this.getPortNumber(true).toString())];
-                    case 5:
-                        _f.APP_PORT = _g.sent();
+                        _g = this.getFromGlobalEnv;
+                        _h = ["APP_PORT"];
+                        return [4, this.getPortNumber()];
+                    case 5: return [4, _g.apply(this, _h.concat([(_j.sent()).toString()]))];
+                    case 6:
+                        _f.APP_PORT = _j.sent();
                         return [2, env];
                 }
             });
@@ -124,16 +127,26 @@ var PluginInstanceContainerController = (function () {
         return this.status;
     };
     PluginInstanceContainerController.prototype.getPortNumber = function (returnDefault) {
-        if (this.portNumber) {
-            return this.portNumber;
-        }
-        if (returnDefault) {
-            var ports = this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
-            var port = ports.length ? parseInt(ports[ports.length - 1]) + 1 : 7010;
-            ports.push(port);
-            this.callerInstance.callerPlugin.gluePluginStore.set("ports", ports);
-            return port;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2, new Promise(function (resolve, reject) {
+                        if (_this.portNumber) {
+                            return resolve(_this.portNumber);
+                        }
+                        var ports = _this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
+                        DockerodeHelper.getPort(7650, ports)
+                            .then(function (port) {
+                            _this.setPortNumber(port);
+                            ports.push(port);
+                            _this.callerInstance.callerPlugin.gluePluginStore.set("ports", ports);
+                            return resolve(_this.portNumber);
+                        })["catch"](function (e) {
+                            reject(e);
+                        });
+                    })];
+            });
+        });
     };
     PluginInstanceContainerController.prototype.getContainerId = function () {
         return this.containerId;
@@ -154,9 +167,10 @@ var PluginInstanceContainerController = (function () {
     PluginInstanceContainerController.prototype.up = function () {
         var _a, _b, _c, _d, _e;
         return __awaiter(this, void 0, void 0, function () {
+            var _f, _g, _h;
             var _this = this;
-            return __generator(this, function (_f) {
-                switch (_f.label) {
+            return __generator(this, function (_j) {
+                switch (_j.label) {
                     case 0:
                         if (!(this.getStatus() !== "up")) return [3, 4];
                         if (!this.callerInstance.getMinioInstance()) {
@@ -170,8 +184,8 @@ var PluginInstanceContainerController = (function () {
                         return [4, ((_e = (_d = this.callerInstance
                                 .getMinioInstance()) === null || _d === void 0 ? void 0 : _d.getContainerController()) === null || _e === void 0 ? void 0 : _e.up())];
                     case 1:
-                        _f.sent();
-                        _f.label = 2;
+                        _j.sent();
+                        _j.label = 2;
                     case 2: return [4, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                             var _this = this;
                             return __generator(this, function (_a) {
@@ -184,12 +198,24 @@ var PluginInstanceContainerController = (function () {
                                     SpawnHelper.start(_this.callerInstance.getInstallationPath(), _this.runScript())
                                         .then(function (_a) {
                                         var processId = _a.processId;
-                                        _this.setStatus("up");
-                                        _this.setContainerId(processId);
-                                        console.log("\x1b[32m");
-                                        console.log("Use http://localhost:".concat(_this.getPortNumber(), "/upload as your storage endpoint"));
-                                        console.log("\x1b[0m");
-                                        return resolve(true);
+                                        return __awaiter(_this, void 0, void 0, function () {
+                                            var _b, _c, _d;
+                                            return __generator(this, function (_e) {
+                                                switch (_e.label) {
+                                                    case 0:
+                                                        this.setStatus("up");
+                                                        this.setContainerId(processId);
+                                                        console.log("\x1b[32m");
+                                                        _c = (_b = console).log;
+                                                        _d = "Use http://localhost:".concat;
+                                                        return [4, this.getPortNumber()];
+                                                    case 1:
+                                                        _c.apply(_b, [_d.apply("Use http://localhost:", [_e.sent(), "/upload as your storage endpoint"])]);
+                                                        console.log("\x1b[0m");
+                                                        return [2, resolve(true)];
+                                                }
+                                            });
+                                        });
                                     })["catch"](function (e) {
                                         return reject(e);
                                     });
@@ -200,9 +226,18 @@ var PluginInstanceContainerController = (function () {
                             });
                         }); })];
                     case 3:
-                        _f.sent();
-                        _f.label = 4;
-                    case 4: return [2];
+                        _j.sent();
+                        return [3, 6];
+                    case 4:
+                        console.log("\x1b[32m");
+                        _g = (_f = console).log;
+                        _h = "Use http://localhost:".concat;
+                        return [4, this.getPortNumber()];
+                    case 5:
+                        _g.apply(_f, [_h.apply("Use http://localhost:", [_j.sent(), "/upload as your storage endpoint"])]);
+                        console.log("\x1b[0m");
+                        _j.label = 6;
+                    case 6: return [2];
                 }
             });
         });

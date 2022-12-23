@@ -3,16 +3,16 @@ import IInstance from "@gluestack/framework/types/plugin/interface/IInstance";
 import { PluginInstance } from "../PluginInstance";
 import { PluginInstanceContainerController } from "../PluginInstanceContainerController";
 
-function constructEnvFromJson(
+async function constructEnvFromJson(
   storageInstance: PluginInstance,
   minioInstance: IInstance,
   json: any,
-): string {
+) {
   let env = "";
   //@ts-ignore
   const containerController: PluginInstanceContainerController =
     storageInstance.getContainerController();
-  json.APP_PORT = containerController.getPortNumber(true);
+  json.APP_PORT = await containerController.getPortNumber();
   Object.keys(json).map((key) => {
     env += `${key}="${json[key]}"
 `;
@@ -28,6 +28,6 @@ export async function writeEnv(
   const path = `${storageInstance.getInstallationPath()}/.env`;
   fs.writeFileSync(
     path,
-    constructEnvFromJson(storageInstance, minioInstance, json),
+    await constructEnvFromJson(storageInstance, minioInstance, json),
   );
 }

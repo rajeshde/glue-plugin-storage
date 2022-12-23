@@ -20,7 +20,7 @@ async function selectMinioInstance(minioInstances: IInstance[]) {
     return {
       title: `${instance.getName()}`,
       description: `Will attach minio storage running on port "${
-        instance.getContainerController().getEnv().MINIO_PORT
+        instance.getContainerController().portNumber
       }"`,
       value: instance,
     };

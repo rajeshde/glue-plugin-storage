@@ -85,10 +85,15 @@ var GlueStackPlugin = (function () {
                         return [4, this.app.createPluginInstance(this, instanceName, this.getTemplateFolderPath(), target)];
                     case 1:
                         storageInstance = _a.sent();
+                        if (!storageInstance) return [3, 4];
                         return [4, (0, attachMinioInstance_1.attachMinioInstance)(storageInstance, minioPlugin.getInstances())];
                     case 2:
                         _a.sent();
-                        return [2];
+                        return [4, storageInstance.getContainerController().up()];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [2];
                 }
             });
         });

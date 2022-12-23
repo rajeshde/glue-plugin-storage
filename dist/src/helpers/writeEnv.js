@@ -62,21 +62,39 @@ exports.__esModule = true;
 exports.writeEnv = void 0;
 var fs = __importStar(require("fs"));
 function constructEnvFromJson(storageInstance, minioInstance, json) {
-    var env = "";
-    var containerController = storageInstance.getContainerController();
-    json.APP_PORT = containerController.getPortNumber(true);
-    Object.keys(json).map(function (key) {
-        env += "".concat(key, "=\"").concat(json[key], "\"\n");
+    return __awaiter(this, void 0, void 0, function () {
+        var env, containerController, _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    env = "";
+                    containerController = storageInstance.getContainerController();
+                    _a = json;
+                    return [4, containerController.getPortNumber()];
+                case 1:
+                    _a.APP_PORT = _b.sent();
+                    Object.keys(json).map(function (key) {
+                        env += "".concat(key, "=\"").concat(json[key], "\"\n");
+                    });
+                    return [2, env];
+            }
+        });
     });
-    return env;
 }
 function writeEnv(storageInstance, minioInstance, json) {
     return __awaiter(this, void 0, void 0, function () {
-        var path;
-        return __generator(this, function (_a) {
-            path = "".concat(storageInstance.getInstallationPath(), "/.env");
-            fs.writeFileSync(path, constructEnvFromJson(storageInstance, minioInstance, json));
-            return [2];
+        var path, _a, _b, _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0:
+                    path = "".concat(storageInstance.getInstallationPath(), "/.env");
+                    _b = (_a = fs).writeFileSync;
+                    _c = [path];
+                    return [4, constructEnvFromJson(storageInstance, minioInstance, json)];
+                case 1:
+                    _b.apply(_a, _c.concat([_d.sent()]));
+                    return [2];
+            }
         });
     });
 }

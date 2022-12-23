@@ -74,7 +74,10 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
       target,
     );
 
-    await attachMinioInstance(storageInstance, minioPlugin.getInstances());
+    if (storageInstance) {
+      await attachMinioInstance(storageInstance, minioPlugin.getInstances());
+      await storageInstance.getContainerController().up();
+    }
   }
 
   createInstance(

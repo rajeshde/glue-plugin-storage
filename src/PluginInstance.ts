@@ -33,6 +33,7 @@ export class PluginInstance
     this.callerPlugin = callerPlugin;
     this.gluePluginStore = gluePluginStore;
     this.installationPath = installationPath;
+    //@ts-ignore
     this.containerController = new PluginInstanceContainerController(app, this);
   }
 

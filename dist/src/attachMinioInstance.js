@@ -55,7 +55,7 @@ function selectMinioInstance(minioInstances) {
                     choices = minioInstances.map(function (instance) {
                         return {
                             title: "".concat(instance.getName()),
-                            description: "Will attach minio storage running on port \"".concat(instance.getContainerController().getEnv().MINIO_PORT, "\""),
+                            description: "Will attach minio storage running on port \"".concat(instance.getContainerController().portNumber, "\""),
                             value: instance
                         };
                     });
