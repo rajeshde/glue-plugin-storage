@@ -1,9 +1,9 @@
 module.exports = () => [
   {
-    "path": "/backend/storagegqlfirst",
+    "path": "/backend/functions",
     "proxy": {
-      "instance": "storagegqlfirst:3500",
-      "path": "/v1.0/invoke/storagegqlfirst/method/"
+      "instance": "functions:3500",
+      "path": "/v1.0/invoke/functions/method/"
     }
   }
 ];
