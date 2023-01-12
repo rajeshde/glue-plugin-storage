@@ -26,7 +26,7 @@ class Express {
      */
     mountRoutes() {
         this.express.use(express_1.default.json());
-        this.express = routes_1.default.upload(this.express);
+        this.express = routes_1.default.storage(this.express);
     }
     /**
      * Start the express server

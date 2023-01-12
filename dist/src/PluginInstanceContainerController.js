@@ -38,7 +38,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.PluginInstanceContainerController = void 0;
 var _a = require("@gluestack/helpers"), SpawnHelper = _a.SpawnHelper, DockerodeHelper = _a.DockerodeHelper;
-var create_dockerfile_1 = require("./create-dockerfile");
 var GlobalEnv = require("@gluestack/helpers").GlobalEnv;
 var PluginInstanceContainerController = (function () {
     function PluginInstanceContainerController(app, callerInstance) {
@@ -134,16 +133,9 @@ var PluginInstanceContainerController = (function () {
                         if (_this.portNumber) {
                             return resolve(_this.portNumber);
                         }
-                        var ports = _this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
-                        DockerodeHelper.getPort(7650, ports)
-                            .then(function (port) {
-                            _this.setPortNumber(port);
-                            ports.push(port);
-                            _this.callerInstance.callerPlugin.gluePluginStore.set("ports", ports);
-                            return resolve(_this.portNumber);
-                        })["catch"](function (e) {
-                            reject(e);
-                        });
+                        var port = 9000;
+                        _this.setPortNumber(port);
+                        return resolve(_this.portNumber);
                     })];
             });
         });
@@ -171,18 +163,7 @@ var PluginInstanceContainerController = (function () {
             var _this = this;
             return __generator(this, function (_j) {
                 switch (_j.label) {
-                    case 0:
-                        if (!(this.getStatus() !== "up")) return [3, 4];
-                        if (!this.callerInstance.getMinioInstance()) {
-                            throw new Error("No minio instance attached with ".concat(this.callerInstance.getName()));
-                        }
-                        if (!((_a = this.callerInstance.getMinioInstance()) === null || _a === void 0 ? void 0 : _a.getContainerController())) {
-                            throw new Error("Not a valid minio storage configured with ".concat(this.callerInstance.getName()));
-                        }
-                        if (!(((_c = (_b = this.callerInstance
-                            .getMinioInstance()) === null || _b === void 0 ? void 0 : _b.getContainerController()) === null || _c === void 0 ? void 0 : _c.getStatus()) !== "up")) return [3, 2];
-                        return [4, ((_e = (_d = this.callerInstance
-                                .getMinioInstance()) === null || _d === void 0 ? void 0 : _d.getContainerController()) === null || _e === void 0 ? void 0 : _e.up())];
+                    case 0: return [2];
                     case 1:
                         _j.sent();
                         _j.label = 2;
@@ -247,22 +228,7 @@ var PluginInstanceContainerController = (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        if (!(this.getStatus() !== "down")) return [3, 2];
-                        return [4, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                                var _this = this;
-                                return __generator(this, function (_a) {
-                                    SpawnHelper.stop(this.getContainerId(), this.callerInstance.getName())
-                                        .then(function () {
-                                        _this.setStatus("down");
-                                        _this.setContainerId(null);
-                                        return resolve(true);
-                                    })["catch"](function (e) {
-                                        return reject(e);
-                                    });
-                                    return [2];
-                                });
-                            }); })];
+                    case 0: return [2];
                     case 1:
                         _a.sent();
                         _a.label = 2;
@@ -274,12 +240,7 @@ var PluginInstanceContainerController = (function () {
     PluginInstanceContainerController.prototype.build = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, (0, create_dockerfile_1.generateDockerfile)(this.callerInstance.getInstallationPath())];
-                    case 1:
-                        _a.sent();
-                        return [2];
-                }
+                return [2];
             });
         });
     };

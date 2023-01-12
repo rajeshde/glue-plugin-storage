@@ -13,4 +13,7 @@ const router = (0, express_1.Router)();
  */
 const upload = multer();
 router.post("/upload", upload.single("file"), handlers_1.default.upload);
+router.get("/", (req, res) => {
+    return res.json({ status: "ok" });
+});
 exports.default = router;

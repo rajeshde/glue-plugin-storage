@@ -30,7 +30,7 @@ class Express {
    */
   private mountRoutes(): void {
     this.express.use(express.json());
-    this.express = Routes.upload(this.express);
+    this.express = Routes.storage(this.express);
   }
 
   /**

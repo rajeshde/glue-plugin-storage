@@ -9,6 +9,9 @@ import IManagesInstances from "@gluestack/framework/types/plugin/interface/IMana
 import IHasContainerController from "@gluestack/framework/types/plugin/interface/IHasContainerController";
 import IGlueStorePlugin from "@gluestack/framework/types/store/interface/IGluePluginStore";
 import { attachMinioInstance } from "./attachMinioInstance";
+import { PluginInstance as GraphqlPluginInstance } from "@gluestack/glue-plugin-graphql/src/PluginInstance";
+import { PluginInstance as MinioPluginInstance } from "@gluestack/glue-plugin-minio/src/PluginInstance";
+import { attachGraphqlInstance } from "./attachGraphqlInstance";
 
 //Do not edit the name of this class
 export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
@@ -47,25 +50,17 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
     return `${process.cwd()}/node_modules/${this.getName()}/template`;
   }
 
+  getMigrationFolderPath(): string {
+    return `${process.cwd()}/node_modules/${this.getName()}/hasura/migrations`;
+  }
+
   getInstallationPath(target: string): string {
     return `./backend/functions/${target}`;
   }
 
   async runPostInstall(instanceName: string, target: string) {
-    const minioPlugin: GlueStackPlugin = this.app.getPluginByName(
-      "@gluestack/glue-plugin-minio",
-    );
-    //Validation
-    if (!minioPlugin || !minioPlugin.getInstances().length) {
-      console.log("\x1b[36m");
-      console.log(
-        `Install minio instance: \`node glue add minio ${instanceName}-minio\``,
-      );
-      console.log("\x1b[31m");
-      throw new Error(
-        "Minio instance not installed from `@gluestack/glue-plugin-minio`",
-      );
-    }
+    const minioInstances = await this.getMinioInstances(instanceName);
+    const graphqlInstances = await this.getGraphqlInstances();
 
     const storageInstance: PluginInstance = await this.app.createPluginInstance(
       this,
@@ -75,8 +70,8 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
     );
 
     if (storageInstance) {
-      await attachMinioInstance(storageInstance, minioPlugin.getInstances());
-      await storageInstance.getContainerController().up();
+      await attachMinioInstance(storageInstance, minioInstances);
+      await attachGraphqlInstance(storageInstance, graphqlInstances);
     }
   }
 
@@ -98,5 +93,56 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
 
   getInstances(): (IInstance & IHasContainerController)[] {
     return this.instances;
+  }
+
+  async getGraphqlInstances(): Promise<GraphqlPluginInstance[]> {
+    const graphqlPlugin: GlueStackPlugin = this.app.getPluginByName(
+      "@gluestack/glue-plugin-graphql",
+    );
+    //Validation
+    if (!graphqlPlugin || !graphqlPlugin.getInstances().length) {
+      console.log("\x1b[36m");
+      console.log(
+        `Install graphql instance: \`node glue add graphql graphql-backend\``,
+      );
+      console.log("\x1b[31m");
+      throw new Error(
+        "Graphql instance not installed from `@gluestack/glue-plugin-graphql`",
+      );
+    }
+    const graphqlInstances: GraphqlPluginInstance[] = [];
+    graphqlPlugin
+      .getInstances()
+      .map((graphqlInstance: GraphqlPluginInstance) => {
+        if (!graphqlInstance.gluePluginStore.get("storage_instance")) {
+          graphqlInstances.push(graphqlInstance);
+        }
+      });
+    if (!graphqlInstances.length) {
+      throw new Error(
+        "There is no graphql instance where storage plugin can be installed",
+      );
+    }
+    return graphqlInstances;
+  }
+
+  async getMinioInstances(
+    instanceName: string,
+  ): Promise<MinioPluginInstance[]> {
+    const minioPlugin: GlueStackPlugin = this.app.getPluginByName(
+      "@gluestack/glue-plugin-minio",
+    );
+    //Validation
+    if (!minioPlugin || !minioPlugin.getInstances().length) {
+      console.log("\x1b[36m");
+      console.log(
+        `Install minio instance: \`node glue add minio ${instanceName}-minio\``,
+      );
+      console.log("\x1b[31m");
+      throw new Error(
+        "Minio instance not installed from `@gluestack/glue-plugin-minio`",
+      );
+    }
+    return minioPlugin.getInstances();
   }
 }

@@ -43,6 +43,21 @@ var PluginInstance = (function () {
             return minioInstance;
         }
     };
+    PluginInstance.prototype.getGraphqlInstance = function () {
+        var graphqlInstance = null;
+        var graphql_instance = this.gluePluginStore.get("graphql_instance");
+        if (graphql_instance) {
+            var plugin = this.app.getPluginByName("@gluestack/glue-plugin-graphql");
+            if (plugin) {
+                plugin.getInstances().map(function (instance) {
+                    if (instance.getName() === graphql_instance) {
+                        graphqlInstance = instance;
+                    }
+                });
+            }
+            return graphqlInstance;
+        }
+    };
     return PluginInstance;
 }());
 exports.PluginInstance = PluginInstance;

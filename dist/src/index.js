@@ -43,6 +43,7 @@ exports.GlueStackPlugin = void 0;
 var package_json_1 = __importDefault(require("../package.json"));
 var PluginInstance_1 = require("./PluginInstance");
 var attachMinioInstance_1 = require("./attachMinioInstance");
+var attachGraphqlInstance_1 = require("./attachGraphqlInstance");
 var GlueStackPlugin = (function () {
     function GlueStackPlugin(app, gluePluginStore) {
         this.type = "stateless";
@@ -66,34 +67,35 @@ var GlueStackPlugin = (function () {
     GlueStackPlugin.prototype.getTemplateFolderPath = function () {
         return "".concat(process.cwd(), "/node_modules/").concat(this.getName(), "/template");
     };
+    GlueStackPlugin.prototype.getMigrationFolderPath = function () {
+        return "".concat(process.cwd(), "/node_modules/").concat(this.getName(), "/hasura/migrations");
+    };
     GlueStackPlugin.prototype.getInstallationPath = function (target) {
         return "./backend/functions/".concat(target);
     };
     GlueStackPlugin.prototype.runPostInstall = function (instanceName, target) {
         return __awaiter(this, void 0, void 0, function () {
-            var minioPlugin, storageInstance;
+            var minioInstances, graphqlInstances, storageInstance;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        minioPlugin = this.app.getPluginByName("@gluestack/glue-plugin-minio");
-                        if (!minioPlugin || !minioPlugin.getInstances().length) {
-                            console.log("\x1b[36m");
-                            console.log("Install minio instance: `node glue add minio ".concat(instanceName, "-minio`"));
-                            console.log("\x1b[31m");
-                            throw new Error("Minio instance not installed from `@gluestack/glue-plugin-minio`");
-                        }
-                        return [4, this.app.createPluginInstance(this, instanceName, this.getTemplateFolderPath(), target)];
+                    case 0: return [4, this.getMinioInstances(instanceName)];
                     case 1:
-                        storageInstance = _a.sent();
-                        if (!storageInstance) return [3, 4];
-                        return [4, (0, attachMinioInstance_1.attachMinioInstance)(storageInstance, minioPlugin.getInstances())];
+                        minioInstances = _a.sent();
+                        return [4, this.getGraphqlInstances()];
                     case 2:
-                        _a.sent();
-                        return [4, storageInstance.getContainerController().up()];
+                        graphqlInstances = _a.sent();
+                        return [4, this.app.createPluginInstance(this, instanceName, this.getTemplateFolderPath(), target)];
                     case 3:
+                        storageInstance = _a.sent();
+                        if (!storageInstance) return [3, 6];
+                        return [4, (0, attachMinioInstance_1.attachMinioInstance)(storageInstance, minioInstances)];
+                    case 4:
                         _a.sent();
-                        _a.label = 4;
-                    case 4: return [2];
+                        return [4, (0, attachGraphqlInstance_1.attachGraphqlInstance)(storageInstance, graphqlInstances)];
+                    case 5:
+                        _a.sent();
+                        _a.label = 6;
+                    case 6: return [2];
                 }
             });
         });
@@ -105,6 +107,47 @@ var GlueStackPlugin = (function () {
     };
     GlueStackPlugin.prototype.getInstances = function () {
         return this.instances;
+    };
+    GlueStackPlugin.prototype.getGraphqlInstances = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var graphqlPlugin, graphqlInstances;
+            return __generator(this, function (_a) {
+                graphqlPlugin = this.app.getPluginByName("@gluestack/glue-plugin-graphql");
+                if (!graphqlPlugin || !graphqlPlugin.getInstances().length) {
+                    console.log("\x1b[36m");
+                    console.log("Install graphql instance: `node glue add graphql graphql-backend`");
+                    console.log("\x1b[31m");
+                    throw new Error("Graphql instance not installed from `@gluestack/glue-plugin-graphql`");
+                }
+                graphqlInstances = [];
+                graphqlPlugin
+                    .getInstances()
+                    .map(function (graphqlInstance) {
+                    if (!graphqlInstance.gluePluginStore.get("storage_instance")) {
+                        graphqlInstances.push(graphqlInstance);
+                    }
+                });
+                if (!graphqlInstances.length) {
+                    throw new Error("There is no graphql instance where storage plugin can be installed");
+                }
+                return [2, graphqlInstances];
+            });
+        });
+    };
+    GlueStackPlugin.prototype.getMinioInstances = function (instanceName) {
+        return __awaiter(this, void 0, void 0, function () {
+            var minioPlugin;
+            return __generator(this, function (_a) {
+                minioPlugin = this.app.getPluginByName("@gluestack/glue-plugin-minio");
+                if (!minioPlugin || !minioPlugin.getInstances().length) {
+                    console.log("\x1b[36m");
+                    console.log("Install minio instance: `node glue add minio ".concat(instanceName, "-minio`"));
+                    console.log("\x1b[31m");
+                    throw new Error("Minio instance not installed from `@gluestack/glue-plugin-minio`");
+                }
+                return [2, minioPlugin.getInstances()];
+            });
+        });
     };
     return GlueStackPlugin;
 }());

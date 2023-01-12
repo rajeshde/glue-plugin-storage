@@ -38,7 +38,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.attachMinioInstance = exports.setMinioConfig = void 0;
 var prompts = require("prompts");
-var writeEnv_1 = require("./helpers/writeEnv");
 var setMinioConfig = function (storageInstance, minioInstance) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         storageInstance.gluePluginStore.set("minio_instance", minioInstance.getName());
@@ -74,24 +73,18 @@ function selectMinioInstance(minioInstances) {
 }
 function attachMinioInstance(storageInstance, minioInstances) {
     return __awaiter(this, void 0, void 0, function () {
-        var instance, env;
+        var instance;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4, selectMinioInstance(minioInstances)];
                 case 1:
                     instance = _a.sent();
-                    if (!instance) return [3, 5];
+                    if (!instance) return [3, 3];
                     return [4, (0, exports.setMinioConfig)(storageInstance, instance)];
                 case 2:
                     _a.sent();
-                    return [4, instance.getContainerController().getEnv()];
-                case 3:
-                    env = _a.sent();
-                    return [4, (0, writeEnv_1.writeEnv)(storageInstance, instance, env)];
-                case 4:
-                    _a.sent();
-                    _a.label = 5;
-                case 5: return [2];
+                    _a.label = 3;
+                case 3: return [2];
             }
         });
     });

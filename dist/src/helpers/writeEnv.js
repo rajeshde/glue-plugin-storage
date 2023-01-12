@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -61,27 +72,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.writeEnv = void 0;
 var fs = __importStar(require("fs"));
-function constructEnvFromJson(storageInstance, minioInstance, json) {
+function constructEnvFromJson(storageInstance, graphqlInstance) {
     return __awaiter(this, void 0, void 0, function () {
-        var env, containerController, _a;
+        var storageJson, env, containerController, _a, graphqlJson, keys;
         return __generator(this, function (_b) {
             switch (_b.label) {
-                case 0:
+                case 0: return [4, storageInstance
+                        .getMinioInstance()
+                        .getContainerController()
+                        .getEnv()];
+                case 1:
+                    storageJson = _b.sent();
                     env = "";
                     containerController = storageInstance.getContainerController();
-                    _a = json;
+                    _a = storageJson;
                     return [4, containerController.getPortNumber()];
-                case 1:
+                case 2:
                     _a.APP_PORT = _b.sent();
-                    Object.keys(json).map(function (key) {
-                        env += "".concat(key, "=\"").concat(json[key], "\"\n");
+                    return [4, graphqlInstance.getContainerController().getEnv()];
+                case 3:
+                    graphqlJson = _b.sent();
+                    keys = __assign(__assign({}, storageJson), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: graphqlJson["HASURA_GRAPHQL_UNAUTHORIZED_ROLE"] || "", HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(), HASURA_GRAPHQL_ADMIN_SECRET: graphqlJson["HASURA_GRAPHQL_ADMIN_SECRET"] || "" });
+                    Object.keys(keys).map(function (key) {
+                        env += "".concat(key, "=\"").concat(keys[key], "\"\n");
                     });
                     return [2, env];
             }
         });
     });
 }
-function writeEnv(storageInstance, minioInstance, json) {
+function writeEnv(storageInstance, graphqlInstance) {
     return __awaiter(this, void 0, void 0, function () {
         var path, _a, _b, _c;
         return __generator(this, function (_d) {
@@ -90,7 +110,7 @@ function writeEnv(storageInstance, minioInstance, json) {
                     path = "".concat(storageInstance.getInstallationPath(), "/.env");
                     _b = (_a = fs).writeFileSync;
                     _c = [path];
-                    return [4, constructEnvFromJson(storageInstance, minioInstance, json)];
+                    return [4, constructEnvFromJson(storageInstance, graphqlInstance)];
                 case 1:
                     _b.apply(_a, _c.concat([_d.sent()]));
                     return [2];

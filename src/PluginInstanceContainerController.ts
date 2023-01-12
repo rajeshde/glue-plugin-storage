@@ -1,7 +1,6 @@
 const { SpawnHelper, DockerodeHelper } = require("@gluestack/helpers");
 import IApp from "@gluestack/framework/types/app/interface/IApp";
 import IContainerController from "@gluestack/framework/types/plugin/interface/IContainerController";
-import { generateDockerfile } from "./create-dockerfile";
 import { PluginInstance } from "./PluginInstance";
 const { GlobalEnv } = require("@gluestack/helpers");
 
@@ -76,10 +75,14 @@ export class PluginInstanceContainerController implements IContainerController {
       if (this.portNumber) {
         return resolve(this.portNumber);
       }
+      const port = 9000;
+      this.setPortNumber(port);
+      return resolve(this.portNumber);
+      /*
       let ports =
         this.callerInstance.callerPlugin.gluePluginStore.get("ports") || [];
-      DockerodeHelper.getPort(7650, ports)
-        .then((port: number) => {
+      DockerodeHelper.getPort(9000, ports)
+      .then((port: number) => {
           this.setPortNumber(port);
           ports.push(port);
           this.callerInstance.callerPlugin.gluePluginStore.set("ports", ports);
@@ -88,6 +91,7 @@ export class PluginInstanceContainerController implements IContainerController {
         .catch((e: any) => {
           reject(e);
         });
+        */
     });
   }
 
@@ -116,6 +120,7 @@ export class PluginInstanceContainerController implements IContainerController {
   getConfig(): any {}
 
   async up() {
+    return;
     if (this.getStatus() !== "up") {
       if (!this.callerInstance.getMinioInstance()) {
         throw new Error(
@@ -191,6 +196,7 @@ export class PluginInstanceContainerController implements IContainerController {
   }
 
   async down() {
+    return;
     if (this.getStatus() !== "down") {
       await new Promise(async (resolve, reject) => {
         SpawnHelper.stop(this.getContainerId(), this.callerInstance.getName())
@@ -207,6 +213,6 @@ export class PluginInstanceContainerController implements IContainerController {
   }
 
   async build() {
-    await generateDockerfile(this.callerInstance.getInstallationPath());
+    //
   }
 }

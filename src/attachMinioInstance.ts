@@ -2,7 +2,6 @@ const prompts = require("prompts");
 import { PluginInstance } from "./PluginInstance";
 import IInstance from "@gluestack/framework/types/plugin/interface/IInstance";
 import IHasContainerController from "@gluestack/framework/types/plugin/interface/IHasContainerController";
-import { writeEnv } from "./helpers/writeEnv";
 
 export const setMinioConfig = async (
   storageInstance: PluginInstance,
@@ -42,7 +41,5 @@ export async function attachMinioInstance(
   const instance = await selectMinioInstance(minioInstances);
   if (instance) {
     await setMinioConfig(storageInstance, instance);
-    const env = await instance.getContainerController().getEnv();
-    await writeEnv(storageInstance, instance, env);
   }
 }

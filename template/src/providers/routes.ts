@@ -1,13 +1,13 @@
 import { Application } from "express";
 
-import upload from "../routes/upload";
+import storage from "../routes/storage";
 
 /**
  * Initialize all routes
  */
 class Routes {
-  public upload(_express: Application): Application {
-    return _express.use("/", upload);
+  public storage(_express: Application): Application {
+    return _express.use("/", storage);
   }
 }
 

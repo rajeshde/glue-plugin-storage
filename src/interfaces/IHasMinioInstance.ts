@@ -1,7 +1,5 @@
-import IPlugin from "@gluestack/framework/types/plugin/interface/IPlugin";
-import { IMinio } from "@gluestack/glue-plugin-minio/src/interfaces/IMinio";
-import IHasContainerController from "@gluestack/framework/types/plugin/interface/IHasContainerController";
+import { PluginInstance as MinioPluginInstance } from "@gluestack/glue-plugin-minio/src/PluginInstance";
 
 export interface IHasMinioInstance {
-  getMinioInstance(): IPlugin & IMinio & IHasContainerController;
+  getMinioInstance():  MinioPluginInstance;
 }

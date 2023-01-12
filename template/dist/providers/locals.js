@@ -38,7 +38,10 @@ class Locals {
         const accessKey = process.env.MINIO_ACCESS_KEY || "";
         const secretKey = process.env.MINIO_SECRET_KEY || "";
         const bucket = process.env.MINIO_BUCKET || "";
-        const tokenTimeout = process.env.MINIO_TOKEN_TIMEOUT || "";
+        const tokenTimeout = process.env.MINIO_TOKEN_TIMEOUT || "3600";
+        const hasuraGraphqlUnauthorizedRole = process.env.HASURA_GRAPHQL_UNAUTHORIZED_ROLE || "";
+        const hasuraGraphqlURL = process.env.HASURA_GRAPHQL_URL || "";
+        const hasuraAdminSecret = process.env.HASURA_GRAPHQL_ADMIN_SECRET || "";
         return {
             port,
             endPoint,
@@ -48,6 +51,9 @@ class Locals {
             secretKey,
             bucket,
             tokenTimeout,
+            hasuraGraphqlUnauthorizedRole,
+            hasuraAdminSecret,
+            hasuraGraphqlURL,
         };
     }
     /**

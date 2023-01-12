@@ -9,13 +9,21 @@ import IGlueStorePlugin from "@gluestack/framework/types/store/interface/IGluePl
 import { IMinio } from "@gluestack/glue-plugin-minio/src/interfaces/IMinio";
 import { IHasMinioInstance } from "./interfaces/IHasMinioInstance";
 import IManagesInstances from "@gluestack/framework/types/plugin/interface/IManagesInstances";
-
+import { GlueStackPlugin } from "./";
+import { PluginInstance as GraphqlPluginInstance } from "@gluestack/glue-plugin-graphql/src/PluginInstance";
+import { PluginInstance as MinioPluginInstance } from "@gluestack/glue-plugin-minio/src/PluginInstance";
+import { IHasGraphqlInstance } from "./interfaces/IHasGraphqllnstance";
 export class PluginInstance
-  implements IInstance, IHasContainerController, ILifeCycle, IHasMinioInstance
+  implements
+    IInstance,
+    IHasContainerController,
+    ILifeCycle,
+    IHasMinioInstance,
+    IHasGraphqlInstance
 {
   app: IApp;
   name: string;
-  callerPlugin: IPlugin;
+  callerPlugin: GlueStackPlugin;
   containerController: IContainerController;
   isOfTypeInstance: boolean = false;
   gluePluginStore: IGlueStorePlugin;
@@ -23,7 +31,7 @@ export class PluginInstance
 
   constructor(
     app: IApp,
-    callerPlugin: IPlugin,
+    callerPlugin: GlueStackPlugin,
     name: string,
     gluePluginStore: IGlueStorePlugin,
     installationPath: string,
@@ -61,7 +69,7 @@ export class PluginInstance
     return this.containerController;
   }
 
-  getMinioInstance(): IPlugin & IMinio & IHasContainerController {
+  getMinioInstance(): MinioPluginInstance {
     let minioInstance = null;
     const minio_instance = this.gluePluginStore.get("minio_instance");
     if (minio_instance) {
@@ -69,13 +77,31 @@ export class PluginInstance
         "@gluestack/glue-plugin-minio",
       );
       if (plugin) {
-        plugin.getInstances().map((instance: IInstance & IMinio) => {
+        plugin.getInstances().map((instance: MinioPluginInstance) => {
           if (instance.getName() === minio_instance) {
             minioInstance = instance;
           }
         });
       }
       return minioInstance;
+    }
+  }
+
+  getGraphqlInstance(): GraphqlPluginInstance {
+    let graphqlInstance = null;
+    const graphql_instance = this.gluePluginStore.get("graphql_instance");
+    if (graphql_instance) {
+      const plugin: IPlugin & IManagesInstances = this.app.getPluginByName(
+        "@gluestack/glue-plugin-graphql",
+      );
+      if (plugin) {
+        plugin.getInstances().map((instance: IInstance & IMinio) => {
+          if (instance.getName() === graphql_instance) {
+            graphqlInstance = instance;
+          }
+        });
+      }
+      return graphqlInstance;
     }
   }
 }
