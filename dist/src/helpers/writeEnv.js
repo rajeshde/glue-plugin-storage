@@ -92,7 +92,7 @@ function constructEnvFromJson(storageInstance, graphqlInstance) {
                     return [4, graphqlInstance.getContainerController().getEnv()];
                 case 3:
                     graphqlJson = _b.sent();
-                    keys = __assign(__assign({}, storageJson), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: graphqlJson["HASURA_GRAPHQL_UNAUTHORIZED_ROLE"] || "", HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(), HASURA_GRAPHQL_ADMIN_SECRET: graphqlJson["HASURA_GRAPHQL_ADMIN_SECRET"] || "" });
+                    keys = __assign(__assign({}, storageJson), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: graphqlJson["HASURA_GRAPHQL_UNAUTHORIZED_ROLE"] || "", HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(), HASURA_GRAPHQL_ADMIN_SECRET: graphqlJson["HASURA_GRAPHQL_ADMIN_SECRET"] || "", GLUE_PUBLIC: "true" });
                     Object.keys(keys).map(function (key) {
                         env += "".concat(key, "=\"").concat(keys[key], "\"\n");
                     });

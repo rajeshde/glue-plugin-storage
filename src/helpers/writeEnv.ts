@@ -26,6 +26,7 @@ async function constructEnvFromJson(
     HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(),
     HASURA_GRAPHQL_ADMIN_SECRET:
       graphqlJson["HASURA_GRAPHQL_ADMIN_SECRET"] || "",
+    GLUE_PUBLIC: "true"
   };
 
   Object.keys(keys).map((key) => {
