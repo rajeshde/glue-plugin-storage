@@ -143,6 +143,7 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
         "Minio instance not installed from `@gluestack/glue-plugin-minio`",
       );
     }
+    //@ts-ignore
     return minioPlugin.getInstances();
   }
 }

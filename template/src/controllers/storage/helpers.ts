@@ -7,11 +7,11 @@ class Helpers {
    */
   public minioClient() {
     return new Minio.Client({
-      endPoint: Locals.config().endPoint,
-      port: parseInt(Locals.config().minioPort),
-      useSSL: Locals.config().useSSL === "true",
-      accessKey: Locals.config().accessKey,
-      secretKey: Locals.config().secretKey,
+      endPoint: Locals.config().minioConfig.adminEndPoint,
+      port: parseInt(Locals.config().minioConfig.port),
+      useSSL: Locals.config().minioConfig.useSSL === "true",
+      accessKey: Locals.config().minioConfig.accessKey,
+      secretKey: Locals.config().minioConfig.secretKey,
     });
   }
 }

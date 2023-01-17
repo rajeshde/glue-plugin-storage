@@ -7,7 +7,7 @@ async function constructEnvFromJson(
   storageInstance: PluginInstance,
   graphqlInstance: GraphqlPluginInstance,
 ) {
-  const storageJson = await storageInstance
+  const minioJson = await storageInstance
     .getMinioInstance()
     .getContainerController()
     .getEnv();
@@ -15,18 +15,17 @@ async function constructEnvFromJson(
   //@ts-ignore
   const containerController: PluginInstanceContainerController =
     storageInstance.getContainerController();
-  storageJson.APP_PORT = await containerController.getPortNumber();
-
   const graphqlJson = await graphqlInstance.getContainerController().getEnv();
 
   const keys: any = {
-    ...storageJson,
+    APP_PORT: await containerController.getPortNumber(),
+    APP_ID: storageInstance.getName(),
+    ...minioJson,
     HASURA_GRAPHQL_UNAUTHORIZED_ROLE:
       graphqlJson["HASURA_GRAPHQL_UNAUTHORIZED_ROLE"] || "",
     HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(),
     HASURA_GRAPHQL_ADMIN_SECRET:
       graphqlJson["HASURA_GRAPHQL_ADMIN_SECRET"] || "",
-    GLUE_PUBLIC: "true"
   };
 
   Object.keys(keys).map((key) => {

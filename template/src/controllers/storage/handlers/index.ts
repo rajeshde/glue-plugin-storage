@@ -1,5 +1,6 @@
 import Upload from "./upload";
 import Get from "./get";
+import File from "./file";
 
 class Authentication {
   public upload(req: any, res: any): any {
@@ -7,6 +8,9 @@ class Authentication {
   }
   public get(req: any, res: any): any {
     return Get.handle(req, res);
+  }
+  public file(req: any, res: any): any {
+    return File.handle(req, res);
   }
 }
 

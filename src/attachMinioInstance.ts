@@ -2,6 +2,7 @@ const prompts = require("prompts");
 import { PluginInstance } from "./PluginInstance";
 import IInstance from "@gluestack/framework/types/plugin/interface/IInstance";
 import IHasContainerController from "@gluestack/framework/types/plugin/interface/IHasContainerController";
+import { PluginInstance as MinioPluginInstance } from "@gluestack/glue-plugin-minio/src/PluginInstance";
 
 export const setMinioConfig = async (
   storageInstance: PluginInstance,
@@ -36,7 +37,7 @@ async function selectMinioInstance(minioInstances: IInstance[]) {
 
 export async function attachMinioInstance(
   storageInstance: PluginInstance,
-  minioInstances: (IInstance & IHasContainerController)[],
+  minioInstances: (MinioPluginInstance)[],
 ) {
   const instance = await selectMinioInstance(minioInstances);
   if (instance) {

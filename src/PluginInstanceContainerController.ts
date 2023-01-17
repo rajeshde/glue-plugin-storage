@@ -43,7 +43,7 @@ export class PluginInstanceContainerController implements IContainerController {
   }
 
   async getEnv() {
-    const minioEnv = this.callerInstance
+    const minioEnv:any = await this.callerInstance
       .getMinioInstance()
       .getContainerController()
       .getEnv();
@@ -75,7 +75,7 @@ export class PluginInstanceContainerController implements IContainerController {
       if (this.portNumber) {
         return resolve(this.portNumber);
       }
-      const port = 9000;
+      const port = 9090;
       this.setPortNumber(port);
       return resolve(this.portNumber);
       /*

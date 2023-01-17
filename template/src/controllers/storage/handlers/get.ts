@@ -5,48 +5,36 @@ import Queries from "../graphql/queries";
 
 class Get {
   public static async handle(req: any, res: any): Promise<void> {
-    const { path } = req.params;
+    const { id } = req.params;
     try {
       // graphql query
       const { data } = await Common.GQLRequest({
-        variables: { path: path },
-        query: Queries.FileByPath,
+        variables: { id: parseInt(id) },
+        query: Queries.FileById,
       });
 
       // error handling
-      if (!data || !data.data || !data.data.files) {
-        const error = (data.errors && data.errors) || "Something went wrong!";
-        return Common.Response(res, false, error, null);
+      if (
+        !data ||
+        !data.data ||
+        !data.data.files ||
+        data.data.files.length === 0
+      ) {
+        return res.json({});
       }
-
-      // check if files response is empty
-      if (data.data.files.length === 0) {
-        return Common.Response(res, false, "no such file exists", null);
-      }
-
+      const file = data?.data?.files[0];
       const client = Helpers.minioClient();
 
-      var arr: any = [];
-      client.getObject(
-        Locals.config().bucket,
-        path,
-        function (err: any, dataStream: any) {
-          if (err) {
-            return 
-          }
-          dataStream.on("data", function (chunk: any) {
-            arr.push(chunk);
-          });
-          dataStream.on("end", function () {
-            var buf = Buffer.concat(arr);
-            var fileContents = Buffer.from(buf.toString("base64"), "base64");
-            res.set('Content-disposition', 'attachment; inline=' + data.data.files[0].original_name);
-            res.set('Content-Type', data.data.files[0].mime_type);
-            res.end(fileContents)
-          });
-          dataStream.on("error", function (err: any) {
-            //
-          });
+      client.presignedUrl(
+        "GET",
+        Locals.config().minioConfig.buckets[file.is_public ? "public" : "private"],
+        file.path,
+        parseInt(Locals.config().minioConfig.tokenTimeout),
+        function (err: any, presignedUrl: string) {
+          if (err) return res.json({"url": null});
+          const url = new URL(presignedUrl);
+          let replacedUrl = `${req.protocol}://${req.get('host')}/backend/${Locals.config().appId}/file${url.pathname}${url.search}`
+          return res.json({"url": replacedUrl});
         },
       );
     } catch (error: any) {

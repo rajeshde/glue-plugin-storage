@@ -11,6 +11,21 @@ class Queries {
       mime_type
       etag
       path
+      is_public
+      created_at
+      updated_at
+    }
+  }`;
+        this.FileById = `query ($id: Int!) {
+    files(where: {id: {_eq: $id}}) {
+      id
+      name
+      original_name
+      size
+      mime_type
+      etag
+      path
+      is_public
       created_at
       updated_at
     }

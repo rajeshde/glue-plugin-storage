@@ -15,7 +15,10 @@ export const setGraphqlConfig = async (
     "graphql_instance",
     graphqlInstance.getName(),
   );
-  graphqlInstance.gluePluginStore.set("storage_instance", storageInstance.getName());
+  graphqlInstance.gluePluginStore.set(
+    "storage_instance",
+    storageInstance.getName(),
+  );
   return storageInstance.gluePluginStore.get("graphql_instance");
 };
 
@@ -53,6 +56,17 @@ export async function attachGraphqlInstance(
       routerFilePath,
       replaceSpecialChars(storageInstance.getName()),
       "functions",
+    );
+    const minioInstance = await storageInstance.getMinioInstance();
+    await reWriteFile(
+      routerFilePath,
+      minioInstance.getContainerController().getAdminEndPoint(),
+      "minio_host",
+    );
+    await reWriteFile(
+      routerFilePath,
+      (await minioInstance.getContainerController().getPortNumber()).toString(),
+      "minio_port",
     );
   }
 }

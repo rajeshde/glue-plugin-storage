@@ -80,39 +80,40 @@ var PluginInstanceContainerController = (function () {
             var minioEnv, env, _a, _b, _c, _i, key, _d, _e, _f, _g, _h;
             return __generator(this, function (_j) {
                 switch (_j.label) {
-                    case 0:
-                        minioEnv = this.callerInstance
+                    case 0: return [4, this.callerInstance
                             .getMinioInstance()
                             .getContainerController()
-                            .getEnv();
+                            .getEnv()];
+                    case 1:
+                        minioEnv = _j.sent();
                         env = {};
                         _a = minioEnv;
                         _b = [];
                         for (_c in _a)
                             _b.push(_c);
                         _i = 0;
-                        _j.label = 1;
-                    case 1:
-                        if (!(_i < _b.length)) return [3, 4];
+                        _j.label = 2;
+                    case 2:
+                        if (!(_i < _b.length)) return [3, 5];
                         _c = _b[_i];
-                        if (!(_c in _a)) return [3, 3];
+                        if (!(_c in _a)) return [3, 4];
                         key = _c;
                         _d = env;
                         _e = key;
                         return [4, this.getFromGlobalEnv(key, minioEnv[key])];
-                    case 2:
-                        _d[_e] = _j.sent();
-                        _j.label = 3;
                     case 3:
-                        _i++;
-                        return [3, 1];
+                        _d[_e] = _j.sent();
+                        _j.label = 4;
                     case 4:
+                        _i++;
+                        return [3, 2];
+                    case 5:
                         _f = env;
                         _g = this.getFromGlobalEnv;
                         _h = ["APP_PORT"];
                         return [4, this.getPortNumber()];
-                    case 5: return [4, _g.apply(this, _h.concat([(_j.sent()).toString()]))];
-                    case 6:
+                    case 6: return [4, _g.apply(this, _h.concat([(_j.sent()).toString()]))];
+                    case 7:
                         _f.APP_PORT = _j.sent();
                         return [2, env];
                 }
@@ -133,7 +134,7 @@ var PluginInstanceContainerController = (function () {
                         if (_this.portNumber) {
                             return resolve(_this.portNumber);
                         }
-                        var port = 9000;
+                        var port = 9090;
                         _this.setPortNumber(port);
                         return resolve(_this.portNumber);
                     })];

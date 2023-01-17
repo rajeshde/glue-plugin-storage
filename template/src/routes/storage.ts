@@ -9,9 +9,14 @@ const router = Router();
 /**
  * Authentication routes
  */
-const upload = multer();
+const upload = multer({
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50 Mb
+ },
+});
 
 router.post("/upload", upload.single("file"), Controller.upload);
-router.get("/file/:path", Controller.get);
+router.get("/get/:id", Controller.get);
+// router.get("/file/:path", Controller.file); //deprecated api
 
 export default router;

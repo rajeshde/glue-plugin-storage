@@ -24,12 +24,13 @@ function randomName(fileName) {
 class Upload {
     static handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { is_public } = req.body;
             const client = helpers_1.default.minioClient();
             // Get the file from the request
             const file = req.file;
             // Use the minioClient to upload the file to Minio
             const fileName = randomName(file.originalname);
-            client.putObject(locals_1.default.config().bucket, fileName, file.buffer, function (err, etag) {
+            client.putObject(locals_1.default.config().minioConfig.buckets[is_public === "true" ? "public" : "private"], fileName, file.buffer, function (err, etag) {
                 return __awaiter(this, void 0, void 0, function* () {
                     if (err) {
                         // Handle the error
@@ -43,6 +44,7 @@ class Upload {
                             mime_type: file.mimetype,
                             etag: etag.etag,
                             path: fileName,
+                            is_public: is_public || false,
                         },
                         query: mutations_1.default.InsertFile,
                     });

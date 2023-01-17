@@ -11,6 +11,8 @@ function randomName(fileName: string) {
 
 class Upload {
   public static async handle(req: any, res: any): Promise<void> {
+    const { is_public } = req.body;
+
     const client = Helpers.minioClient();
 
     // Get the file from the request
@@ -21,7 +23,7 @@ class Upload {
     const fileName = randomName(file.originalname);
 
     client.putObject(
-      Locals.config().bucket,
+      Locals.config().minioConfig.buckets[is_public === "true" ? "public" : "private"],
       fileName,
       file.buffer,
       async function (err: any, etag: any) {
@@ -37,6 +39,7 @@ class Upload {
             mime_type: file.mimetype,
             etag: etag.etag,
             path: fileName,
+            is_public: is_public || false,
           },
           query: Mutations.InsertFile,
         });

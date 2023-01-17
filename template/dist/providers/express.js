@@ -14,6 +14,11 @@ class Express {
         this.express = (0, express_1.default)();
         this.mountDotEnv();
         this.mountRoutes();
+        this.express.use(function (req, res, next) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+        });
     }
     /**
      * Mount envirements variables

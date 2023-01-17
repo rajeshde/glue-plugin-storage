@@ -8,6 +8,7 @@ CREATE TABLE "files" (
   "path" text NOT NULL,
   "reference_type" text NULL,
   "reference_id" integer NULL,
+  "is_public" BOOLEAN NOT NULL DEFAULT FALSE,
   "created_at" timestamptz NOT NULL DEFAULT now(),
   "updated_at" timestamptz NOT NULL DEFAULT now(),
   PRIMARY KEY ("id"),

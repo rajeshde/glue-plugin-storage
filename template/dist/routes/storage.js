@@ -11,7 +11,12 @@ const router = (0, express_1.Router)();
 /**
  * Authentication routes
  */
-const upload = multer();
+const upload = multer({
+    limits: {
+        fileSize: 50 * 1024 * 1024, // 50 Mb
+    },
+});
 router.post("/upload", upload.single("file"), handlers_1.default.upload);
-router.get("/file/:path", handlers_1.default.get);
+router.get("/get/:id", handlers_1.default.get);
+// router.get("/file/:path", Controller.file); //deprecated api
 exports.default = router;
