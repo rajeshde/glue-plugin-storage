@@ -1,6 +1,6 @@
 {
     "name": "@gluestack/glue-plugin-storage",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "description": "storage plugin for gluestack",
     "repository": {
         "type": "git",
@@ -16,7 +16,7 @@
         "@gluestack/framework": "^0.0.x",
         "@gluestack/glue-plugin-graphql": "^0.0.x",
         "@gluestack/glue-plugin-minio": "^0.0.x",
-        "@gluestack/helpers": "^0.0.8",
+        "@gluestack/helpers": "^0.0.x",
         "@types/node": "^18.11.17",
         "prompts": "^2.4.2"
     },
