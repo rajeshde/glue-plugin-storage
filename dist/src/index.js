@@ -78,25 +78,49 @@ var GlueStackPlugin = (function () {
             var minioInstances, graphqlInstances, storageInstance;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.getMinioInstances(instanceName)];
+                    case 0: return [4, this.checkAlreadyInstalled()];
                     case 1:
+                        _a.sent();
+                        if (instanceName !== "storage") {
+                            console.log("\x1b[36m");
+                            console.log("Install storage instance: `node glue add storage storage`");
+                            console.log("\x1b[31m");
+                            throw new Error("storage supports instance name `storage` only");
+                        }
+                        return [4, this.getMinioInstances(instanceName)];
+                    case 2:
                         minioInstances = _a.sent();
                         return [4, this.getGraphqlInstances()];
-                    case 2:
+                    case 3:
                         graphqlInstances = _a.sent();
                         return [4, this.app.createPluginInstance(this, instanceName, this.getTemplateFolderPath(), target)];
-                    case 3:
-                        storageInstance = _a.sent();
-                        if (!storageInstance) return [3, 6];
-                        return [4, (0, attachMinioInstance_1.attachMinioInstance)(storageInstance, minioInstances)];
                     case 4:
-                        _a.sent();
-                        return [4, (0, attachGraphqlInstance_1.attachGraphqlInstance)(storageInstance, graphqlInstances)];
+                        storageInstance = _a.sent();
+                        if (!storageInstance) return [3, 7];
+                        return [4, (0, attachMinioInstance_1.attachMinioInstance)(storageInstance, minioInstances)];
                     case 5:
                         _a.sent();
-                        _a.label = 6;
-                    case 6: return [2];
+                        return [4, (0, attachGraphqlInstance_1.attachGraphqlInstance)(storageInstance, graphqlInstances)];
+                    case 6:
+                        _a.sent();
+                        _a.label = 7;
+                    case 7: return [2];
                 }
+            });
+        });
+    };
+    GlueStackPlugin.prototype.checkAlreadyInstalled = function () {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var storagePlugin;
+            return __generator(this, function (_b) {
+                storagePlugin = this.app.getPluginByName("@gluestack/glue-plugin-storage");
+                if ((_a = storagePlugin === null || storagePlugin === void 0 ? void 0 : storagePlugin.getInstances()) === null || _a === void 0 ? void 0 : _a[0]) {
+                    throw new Error("storage instance already installed as ".concat(storagePlugin
+                        .getInstances()[0]
+                        .getName()));
+                }
+                return [2];
             });
         });
     };
