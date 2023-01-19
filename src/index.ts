@@ -59,6 +59,18 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
   }
 
   async runPostInstall(instanceName: string, target: string) {
+    await this.checkAlreadyInstalled();
+    if (instanceName !== "storage") {
+      console.log("\x1b[36m");
+      console.log(
+        `Install storage instance: \`node glue add storage storage\``,
+      );
+      console.log("\x1b[31m");
+      throw new Error(
+        "storage supports instance name `storage` only",
+      );
+    }
+
     const minioInstances = await this.getMinioInstances(instanceName);
     const graphqlInstances = await this.getGraphqlInstances();
 
@@ -72,6 +84,20 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
     if (storageInstance) {
       await attachMinioInstance(storageInstance, minioInstances);
       await attachGraphqlInstance(storageInstance, graphqlInstances);
+    }
+  }
+
+  async checkAlreadyInstalled() {
+    const storagePlugin: GlueStackPlugin = this.app.getPluginByName(
+      "@gluestack/glue-plugin-storage",
+    );
+    //Validation
+    if (storagePlugin?.getInstances()?.[0]) {
+      throw new Error(
+        `storage instance already installed as ${storagePlugin
+          .getInstances()[0]
+          .getName()}`,
+      );
     }
   }
 
