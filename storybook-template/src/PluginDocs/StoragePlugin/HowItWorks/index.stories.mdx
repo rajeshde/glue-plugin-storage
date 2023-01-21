@@ -14,33 +14,33 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
   <br/>
   
   * Storage plugin instance will be running with a **Dapr Sidecar** which
-  is managed by our **Engine** plugin.
+  is managed by your **Backend-Engine** plugin.
   
   
   <br/>
   
   
   
-  * Our storage plugin instance is written in **Express App** which is connected
-  with our **Glue Graphql plugin** and we have already configured the configuration
-  for **Minio Plugin instance** in order to store the files which is running behind the scene.
+  * Your storage plugin instance is written in **Express App** which is connected
+  with your **Glue Plugin Graphql** and it is already configured with
+  **Glue Plugin Minio** in order to store the files which is running behind the scene.
   
   
   <br/>
   
-  * Behind the scene what is happening is, we have created an **Express.js** application
-  inside which we have connected it with **minio** and **graphql**. We have created routes
-  specially for uploading the file and getting the details of already uploaded file.
+  * Behind the scene what is happening is, there is an **Express.js** application
+  inside which it is connected with **minio** and **graphql**. There are routes present
+  already for uploading the file and getting the details of already uploaded file.
   
   <br/>
   
-  * If the storage plugin is installed correctly, then we will get a folder named storage
-  inside our functions folder, where our whole logic of file upload and saving its information
+  * If the storage plugin is installed correctly, then you will get a folder named storage
+  inside your functions folder, where your whole logic of file upload and saving its information
   to graphql is written.
 
   <br/>
   
-  * Our directory stucture for the **storage plugin instance** will be something
+  * Your directory stucture for the **storage plugin instance** should be something
     like this:
     <br/>
 
@@ -81,12 +81,12 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
   <br/>
   <br/>
   
-  * In order to interact with this plugin there is a file named routes.js
-    present in root directory of the instance. If we open that **routes.js** 
-    file, we will see a string value attached to a key named **path**, this
-    is the string which we need to append after our nginx url(http://localhost:9090).
+  * In order to interact with this plugin there is a file named **router.js**
+    present in root directory of the instance. If you open that **router.js** 
+    file, you will see a string value attached to a key named **path**, this
+    is the string which we need to append after your nginx url(http://localhost:9090).
   
-    In our case our path value will be something like this:
+    In my case my path value will be something like this:
     
     ```
         module.exports = () => [
@@ -103,7 +103,7 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
     
     <br/>
   
-    So in order to access our **storage plugin instance** its base url will be
+    So in order to access my **storage plugin instance** its base url should be
     something like this,
     
     
@@ -112,7 +112,7 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
   <br/>
   <br/>
   
-  * In order to start this plugin we need to run the following command:
+  * In order to start this plugin you need to run the following command:
     
     <br/>
   
@@ -123,18 +123,18 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
     <br/>
 
     This command will start running the docker image of all the instances
-    and plugin we have created. Here, in this case it will start running
-    our **storage plugin instance image**, inside our **engine** container.
+    and plugin you have created. Here, in this case it will start running
+    your **storage plugin instance image**, inside your **backend-engine** container.
   
   <br/>
 
-* ## Instructions to start development of auth plugin instance
+* ## Instructions to start development of with this plugin
   
   <br/>
   
-  * Inside our **storage instance directory** we will see that there is
-  directory named **src** in which we have **express** app wirtten in 
-  **typescript**. We can go ahead and start our development from there.
+  * Inside your **storage instance directory** you will see that there is
+  directory named **src** inside which there is an **express** app wirtten in 
+  **typescript**. You can go ahead and start your development from there.
 
 
 
