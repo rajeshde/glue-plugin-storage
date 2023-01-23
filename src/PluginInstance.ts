@@ -77,7 +77,7 @@ export class PluginInstance
         "@gluestack/glue-plugin-minio",
       );
       if (plugin) {
-        plugin.getInstances().map((instance: MinioPluginInstance) => {
+        plugin.getInstances().forEach((instance: MinioPluginInstance) => {
           if (instance.getName() === minio_instance) {
             minioInstance = instance;
           }
@@ -95,7 +95,7 @@ export class PluginInstance
         "@gluestack/glue-plugin-graphql",
       );
       if (plugin) {
-        plugin.getInstances().map((instance: IInstance & IMinio) => {
+        plugin.getInstances().forEach((instance: IInstance & IMinio) => {
           if (instance.getName() === graphql_instance) {
             graphqlInstance = instance;
           }

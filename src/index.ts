@@ -139,7 +139,7 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
     const graphqlInstances: GraphqlPluginInstance[] = [];
     graphqlPlugin
       .getInstances()
-      .map((graphqlInstance: GraphqlPluginInstance) => {
+      .forEach((graphqlInstance: GraphqlPluginInstance) => {
         if (!graphqlInstance.gluePluginStore.get("storage_instance")) {
           graphqlInstances.push(graphqlInstance);
         }

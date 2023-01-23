@@ -62,7 +62,7 @@ export async function attachGraphqlInstance(
       "services",
     );
 
-    const minioInstance = await storageInstance.getMinioInstance();
+    const minioInstance = storageInstance.getMinioInstance();
     await reWriteFile(
       routerFilePath,
       minioInstance.getContainerController().getAdminEndPoint(),
