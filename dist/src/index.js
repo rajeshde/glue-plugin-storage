@@ -71,7 +71,7 @@ var GlueStackPlugin = (function () {
         return "".concat(process.cwd(), "/node_modules/").concat(this.getName(), "/hasura/migrations");
     };
     GlueStackPlugin.prototype.getInstallationPath = function (target) {
-        return "./backend/functions/".concat(target);
+        return "./backend/services/".concat(target);
     };
     GlueStackPlugin.prototype.runPostInstall = function (instanceName, target) {
         return __awaiter(this, void 0, void 0, function () {

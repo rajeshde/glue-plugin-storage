@@ -5,7 +5,7 @@ const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
 // Replaces file's content with the given database name
-const reWriteFile = async (filePath: string, instanceName: string, defaultVar = 'functions') => {
+const reWriteFile = async (filePath: string, instanceName: string, defaultVar = 'services') => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			let data = await readFile(filePath, "utf8");

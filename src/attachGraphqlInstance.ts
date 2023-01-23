@@ -49,20 +49,25 @@ export async function attachGraphqlInstance(
   );
   if (graphqlInstance) {
     await setGraphqlConfig(storageInstance, graphqlInstance);
+
     await writeEnv(storageInstance, graphqlInstance);
+
     await copyToGraphql(storageInstance, graphqlInstance);
+
     const routerFilePath = `${storageInstance.getInstallationPath()}/router.js`;
     await reWriteFile(
       routerFilePath,
       replaceSpecialChars(storageInstance.getName()),
-      "functions",
+      "services",
     );
+
     const minioInstance = await storageInstance.getMinioInstance();
     await reWriteFile(
       routerFilePath,
       minioInstance.getContainerController().getAdminEndPoint(),
       "minio_host",
     );
+
     await reWriteFile(
       routerFilePath,
       (await minioInstance.getContainerController().getPortNumber()).toString(),

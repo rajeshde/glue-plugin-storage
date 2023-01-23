@@ -98,7 +98,7 @@ function attachGraphqlInstance(storageInstance, graphqlInstances) {
                 case 4:
                     _c.sent();
                     routerFilePath = "".concat(storageInstance.getInstallationPath(), "/router.js");
-                    return [4, (0, reWriteFile_1["default"])(routerFilePath, (0, replaceSpecialChars_1.replaceSpecialChars)(storageInstance.getName()), "functions")];
+                    return [4, (0, reWriteFile_1["default"])(routerFilePath, (0, replaceSpecialChars_1.replaceSpecialChars)(storageInstance.getName()), "services")];
                 case 5:
                     _c.sent();
                     return [4, storageInstance.getMinioInstance()];
