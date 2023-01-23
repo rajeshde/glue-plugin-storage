@@ -34,7 +34,7 @@ var PluginInstance = (function () {
         if (minio_instance) {
             var plugin = this.app.getPluginByName("@gluestack/glue-plugin-minio");
             if (plugin) {
-                plugin.getInstances().map(function (instance) {
+                plugin.getInstances().forEach(function (instance) {
                     if (instance.getName() === minio_instance) {
                         minioInstance = instance;
                     }
@@ -49,7 +49,7 @@ var PluginInstance = (function () {
         if (graphql_instance) {
             var plugin = this.app.getPluginByName("@gluestack/glue-plugin-graphql");
             if (plugin) {
-                plugin.getInstances().map(function (instance) {
+                plugin.getInstances().forEach(function (instance) {
                     if (instance.getName() === graphql_instance) {
                         graphqlInstance = instance;
                     }

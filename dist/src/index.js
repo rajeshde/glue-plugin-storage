@@ -146,7 +146,7 @@ var GlueStackPlugin = (function () {
                 graphqlInstances = [];
                 graphqlPlugin
                     .getInstances()
-                    .map(function (graphqlInstance) {
+                    .forEach(function (graphqlInstance) {
                     if (!graphqlInstance.gluePluginStore.get("storage_instance")) {
                         graphqlInstances.push(graphqlInstance);
                     }
