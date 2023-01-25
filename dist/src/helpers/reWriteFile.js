@@ -44,7 +44,7 @@ var util_1 = __importDefault(require("util"));
 var readFile = util_1["default"].promisify(fs_1["default"].readFile);
 var writeFile = util_1["default"].promisify(fs_1["default"].writeFile);
 var reWriteFile = function (filePath, instanceName, defaultVar) {
-    if (defaultVar === void 0) { defaultVar = 'functions'; }
+    if (defaultVar === void 0) { defaultVar = 'services'; }
     return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             return [2, new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {

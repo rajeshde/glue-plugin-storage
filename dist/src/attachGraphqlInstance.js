@@ -87,7 +87,7 @@ function attachGraphqlInstance(storageInstance, graphqlInstances) {
                 case 0: return [4, selectGraphqlInstance(graphqlInstances)];
                 case 1:
                     graphqlInstance = _c.sent();
-                    if (!graphqlInstance) return [3, 10];
+                    if (!graphqlInstance) return [3, 9];
                     return [4, (0, exports.setGraphqlConfig)(storageInstance, graphqlInstance)];
                 case 2:
                     _c.sent();
@@ -98,24 +98,22 @@ function attachGraphqlInstance(storageInstance, graphqlInstances) {
                 case 4:
                     _c.sent();
                     routerFilePath = "".concat(storageInstance.getInstallationPath(), "/router.js");
-                    return [4, (0, reWriteFile_1["default"])(routerFilePath, (0, replaceSpecialChars_1.replaceSpecialChars)(storageInstance.getName()), "functions")];
+                    return [4, (0, reWriteFile_1["default"])(routerFilePath, (0, replaceSpecialChars_1.replaceSpecialChars)(storageInstance.getName()), "services")];
                 case 5:
                     _c.sent();
-                    return [4, storageInstance.getMinioInstance()];
-                case 6:
-                    minioInstance = _c.sent();
+                    minioInstance = storageInstance.getMinioInstance();
                     return [4, (0, reWriteFile_1["default"])(routerFilePath, minioInstance.getContainerController().getAdminEndPoint(), "minio_host")];
-                case 7:
+                case 6:
                     _c.sent();
                     _a = reWriteFile_1["default"];
                     _b = [routerFilePath];
                     return [4, minioInstance.getContainerController().getPortNumber()];
-                case 8: return [4, _a.apply(void 0, _b.concat([(_c.sent()).toString(),
+                case 7: return [4, _a.apply(void 0, _b.concat([(_c.sent()).toString(),
                         "minio_port"]))];
-                case 9:
+                case 8:
                     _c.sent();
-                    _c.label = 10;
-                case 10: return [2];
+                    _c.label = 9;
+                case 9: return [2];
             }
         });
     });

@@ -55,7 +55,7 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
   }
 
   getInstallationPath(target: string): string {
-    return `./backend/functions/${target}`;
+    return `./backend/services/${target}`;
   }
 
   async runPostInstall(instanceName: string, target: string) {
@@ -139,7 +139,7 @@ export class GlueStackPlugin implements IPlugin, IManagesInstances, ILifeCycle {
     const graphqlInstances: GraphqlPluginInstance[] = [];
     graphqlPlugin
       .getInstances()
-      .map((graphqlInstance: GraphqlPluginInstance) => {
+      .forEach((graphqlInstance: GraphqlPluginInstance) => {
         if (!graphqlInstance.gluePluginStore.get("storage_instance")) {
           graphqlInstances.push(graphqlInstance);
         }
