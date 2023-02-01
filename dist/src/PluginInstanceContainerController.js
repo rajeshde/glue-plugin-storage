@@ -161,83 +161,16 @@ var PluginInstanceContainerController = (function () {
     };
     PluginInstanceContainerController.prototype.getConfig = function () { };
     PluginInstanceContainerController.prototype.up = function () {
-        var _a, _b, _c, _d, _e;
         return __awaiter(this, void 0, void 0, function () {
-            var _f, _g, _h;
-            var _this = this;
-            return __generator(this, function (_j) {
-                switch (_j.label) {
-                    case 0: return [2];
-                    case 1:
-                        _j.sent();
-                        _j.label = 2;
-                    case 2: return [4, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                            var _this = this;
-                            return __generator(this, function (_a) {
-                                console.log("\x1b[33m");
-                                console.log("".concat(this.callerInstance.getName(), ": Running \"").concat(this.installScript().join(" "), "\""), "\x1b[0m");
-                                SpawnHelper.run(this.callerInstance.getInstallationPath(), this.installScript())
-                                    .then(function () {
-                                    console.log("\x1b[33m");
-                                    console.log("".concat(_this.callerInstance.getName(), ": Running \"").concat(_this.runScript().join(" "), "\""), "\x1b[0m");
-                                    SpawnHelper.start(_this.callerInstance.getInstallationPath(), _this.runScript())
-                                        .then(function (_a) {
-                                        var processId = _a.processId;
-                                        return __awaiter(_this, void 0, void 0, function () {
-                                            var _b, _c, _d;
-                                            return __generator(this, function (_e) {
-                                                switch (_e.label) {
-                                                    case 0:
-                                                        this.setStatus("up");
-                                                        this.setContainerId(processId);
-                                                        console.log("\x1b[32m");
-                                                        _c = (_b = console).log;
-                                                        _d = "Use http://localhost:".concat;
-                                                        return [4, this.getPortNumber()];
-                                                    case 1:
-                                                        _c.apply(_b, [_d.apply("Use http://localhost:", [_e.sent(), "/upload as your storage endpoint"])]);
-                                                        console.log("\x1b[0m");
-                                                        return [2, resolve(true)];
-                                                }
-                                            });
-                                        });
-                                    })["catch"](function (e) {
-                                        return reject(e);
-                                    });
-                                })["catch"](function (e) {
-                                    return reject(e);
-                                });
-                                return [2];
-                            });
-                        }); })];
-                    case 3:
-                        _j.sent();
-                        return [3, 6];
-                    case 4:
-                        console.log("\x1b[32m");
-                        _g = (_f = console).log;
-                        _h = "Use http://localhost:".concat;
-                        return [4, this.getPortNumber()];
-                    case 5:
-                        _g.apply(_f, [_h.apply("Use http://localhost:", [_j.sent(), "/upload as your storage endpoint"])]);
-                        console.log("\x1b[0m");
-                        _j.label = 6;
-                    case 6: return [2];
-                }
+            return __generator(this, function (_a) {
+                return [2];
             });
         });
     };
     PluginInstanceContainerController.prototype.down = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [2];
-                    case 1:
-                        _a.sent();
-                        _a.label = 2;
-                    case 2: return [2];
-                }
+                return [2];
             });
         });
     };
