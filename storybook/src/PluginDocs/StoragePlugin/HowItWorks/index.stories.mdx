@@ -13,6 +13,10 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
   
   <br/>
   
+  * Storage plugin instance will be registered as a service inside your **backend-engine**.
+  
+  <br/>
+  
   * Storage plugin instance will be running with a **Dapr Sidecar** which
   is managed by your **Backend-Engine** plugin.
   
@@ -22,8 +26,9 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
   
   
   * Your storage plugin instance is written in **Express App** which is connected
-  with your **Glue Plugin Graphql** and it is already configured with
-  **Glue Plugin Minio** in order to store the files which is running behind the scene.
+  with your **Glue Plugin Graphql** and **Glue Plugin Backend-Engine** and it is 
+  already configured with **Glue Plugin Minio** in order to store the files which is
+  running behind the scene.
   
   
   <br/>
@@ -91,11 +96,11 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
     ```
         module.exports = () => [
         {
-          "path": "/backend/storage/upload",
+          "path": "/backend/storage/upload/(.*)",
           "size_in_mb": 100,
           "proxy": {
             "instance": "storage:3500",
-            "path": "/v1.0/invoke/storage/method/upload",
+            "path": "/v1.0/invoke/storage/method/upload/$1",
           },
         },
        ];
