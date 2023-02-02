@@ -1,6 +1,6 @@
 const { SpawnHelper, DockerodeHelper } = require("@gluestack/helpers");
 import IApp from "@gluestack/framework/types/app/interface/IApp";
-import IContainerController from "@gluestack/framework/types/plugin/interface/IContainerController";
+import IContainerController, { IRoutes } from "@gluestack/framework/types/plugin/interface/IContainerController";
 import { PluginInstance } from "./PluginInstance";
 const { GlobalEnv } = require("@gluestack/helpers");
 
@@ -42,8 +42,12 @@ export class PluginInstanceContainerController implements IContainerController {
     return ["npm", "run", "dev"];
   }
 
+  buildScript() {
+    return ["npm", "run", "build"];
+  }
+
   async getEnv() {
-    const minioEnv:any = await this.callerInstance
+    const minioEnv: any = await this.callerInstance
       .getMinioInstance()
       .getContainerController()
       .getEnv();
@@ -117,102 +121,33 @@ export class PluginInstanceContainerController implements IContainerController {
     return (this.containerId = containerId || null);
   }
 
-  getConfig(): any {}
+  getConfig(): any { }
 
   async up() {
-    return;
-    if (this.getStatus() !== "up") {
-      if (!this.callerInstance.getMinioInstance()) {
-        throw new Error(
-          `No minio instance attached with ${this.callerInstance.getName()}`,
-        );
-      }
-      if (!this.callerInstance.getMinioInstance()?.getContainerController()) {
-        throw new Error(
-          `Not a valid minio storage configured with ${this.callerInstance.getName()}`,
-        );
-      }
-      if (
-        this.callerInstance
-          .getMinioInstance()
-          ?.getContainerController()
-          ?.getStatus() !== "up"
-      ) {
-        await this.callerInstance
-          .getMinioInstance()
-          ?.getContainerController()
-          ?.up();
-      }
-
-      await new Promise(async (resolve, reject) => {
-        console.log("\x1b[33m");
-        console.log(
-          `${this.callerInstance.getName()}: Running "${this.installScript().join(
-            " ",
-          )}"`,
-          "\x1b[0m",
-        );
-        SpawnHelper.run(
-          this.callerInstance.getInstallationPath(),
-          this.installScript(),
-        )
-          .then(() => {
-            console.log("\x1b[33m");
-            console.log(
-              `${this.callerInstance.getName()}: Running "${this.runScript().join(
-                " ",
-              )}"`,
-              "\x1b[0m",
-            );
-            SpawnHelper.start(
-              this.callerInstance.getInstallationPath(),
-              this.runScript(),
-            )
-              .then(async ({ processId }: { processId: string }) => {
-                this.setStatus("up");
-                this.setContainerId(processId);
-                console.log("\x1b[32m");
-                console.log(
-                  `Use http://localhost:${await this.getPortNumber()}/upload as your storage endpoint`,
-                );
-                console.log("\x1b[0m");
-                return resolve(true);
-              })
-              .catch((e: any) => {
-                return reject(e);
-              });
-          })
-          .catch((e: any) => {
-            return reject(e);
-          });
-      });
-    } else {
-      console.log("\x1b[32m");
-      console.log(
-        `Use http://localhost:${await this.getPortNumber()}/upload as your storage endpoint`,
-      );
-      console.log("\x1b[0m");
-    }
+    //
   }
 
   async down() {
-    return;
-    if (this.getStatus() !== "down") {
-      await new Promise(async (resolve, reject) => {
-        SpawnHelper.stop(this.getContainerId(), this.callerInstance.getName())
-          .then(() => {
-            this.setStatus("down");
-            this.setContainerId(null);
-            return resolve(true);
-          })
-          .catch((e: any) => {
-            return reject(e);
-          });
-      });
-    }
+    //
   }
 
   async build() {
-    //
+    await SpawnHelper.run(
+      this.callerInstance.getInstallationPath(),
+      this.installScript()
+    );
+    await SpawnHelper.run(
+      this.callerInstance.getInstallationPath(),
+      this.buildScript()
+    );
+  }
+
+  async getRoutes(): Promise<IRoutes[]> {
+    const routes: IRoutes[] = [
+      { method: "POST", path: "/upload" },
+      { method: "GET", path: "/get/{id}" }
+    ];
+
+    return Promise.resolve(routes);
   }
 }
