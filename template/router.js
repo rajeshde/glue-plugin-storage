@@ -8,11 +8,11 @@ module.exports = () => [
     },
   },
   {
-    "path": "/backend/services/file",
+    "path": "/backend/services/file/(.*)",
     "host": "minio_host:minio_port",
     "proxy": {
       "instance": "minio_host:minio_port",
-      "path": "/",
+      "path": "/$1",
     },
   },
 ];
