@@ -81,39 +81,28 @@ function selectGraphqlInstance(graphqlInstances) {
 }
 function attachGraphqlInstance(storageInstance, graphqlInstances) {
     return __awaiter(this, void 0, void 0, function () {
-        var graphqlInstance, routerFilePath, minioInstance, _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var graphqlInstance, routerFilePath;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0: return [4, selectGraphqlInstance(graphqlInstances)];
                 case 1:
-                    graphqlInstance = _c.sent();
-                    if (!graphqlInstance) return [3, 9];
+                    graphqlInstance = _a.sent();
+                    if (!graphqlInstance) return [3, 6];
                     return [4, (0, exports.setGraphqlConfig)(storageInstance, graphqlInstance)];
                 case 2:
-                    _c.sent();
+                    _a.sent();
                     return [4, (0, writeEnv_1.writeEnv)(storageInstance, graphqlInstance)];
                 case 3:
-                    _c.sent();
+                    _a.sent();
                     return [4, (0, copyToGraphql_1.copyToGraphql)(storageInstance, graphqlInstance)];
                 case 4:
-                    _c.sent();
+                    _a.sent();
                     routerFilePath = "".concat(storageInstance.getInstallationPath(), "/router.js");
                     return [4, (0, reWriteFile_1["default"])(routerFilePath, (0, replaceSpecialChars_1.replaceSpecialChars)(storageInstance.getName()), "services")];
                 case 5:
-                    _c.sent();
-                    minioInstance = storageInstance.getMinioInstance();
-                    return [4, (0, reWriteFile_1["default"])(routerFilePath, minioInstance.getContainerController().getAdminEndPoint(), "minio_host")];
-                case 6:
-                    _c.sent();
-                    _a = reWriteFile_1["default"];
-                    _b = [routerFilePath];
-                    return [4, minioInstance.getContainerController().getPortNumber()];
-                case 7: return [4, _a.apply(void 0, _b.concat([(_c.sent()).toString(),
-                        "minio_port"]))];
-                case 8:
-                    _c.sent();
-                    _c.label = 9;
-                case 9: return [2];
+                    _a.sent();
+                    _a.label = 6;
+                case 6: return [2];
             }
         });
     });

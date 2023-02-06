@@ -61,18 +61,5 @@ export async function attachGraphqlInstance(
       replaceSpecialChars(storageInstance.getName()),
       "services",
     );
-
-    const minioInstance = storageInstance.getMinioInstance();
-    await reWriteFile(
-      routerFilePath,
-      minioInstance.getContainerController().getAdminEndPoint(),
-      "minio_host",
-    );
-
-    await reWriteFile(
-      routerFilePath,
-      (await minioInstance.getContainerController().getPortNumber()).toString(),
-      "minio_port",
-    );
   }
 }
