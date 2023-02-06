@@ -3,6 +3,7 @@ const multer = require("multer");
 
 // Others
 import Controller from "../controllers/storage/handlers";
+import Locals from "../providers/locals";
 
 const router = Router();
 
@@ -11,7 +12,7 @@ const router = Router();
  */
 const upload = multer({
   limits: {
-    fileSize: 50 * 1024 * 1024, // 50 Mb
+    fileSize: Locals.config().maxUploadSize * 1024 * 1024, // In Mb
  },
 });
 

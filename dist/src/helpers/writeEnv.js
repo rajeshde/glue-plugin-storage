@@ -92,7 +92,7 @@ function constructEnvFromJson(storageInstance, graphqlInstance) {
                     _a = {};
                     return [4, containerController.getPortNumber()];
                 case 3:
-                    keys = __assign.apply(void 0, [__assign.apply(void 0, [(_a.APP_PORT = _b.sent(), _a.APP_ID = storageInstance.getName(), _a), minioJson]), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: graphqlJson["HASURA_GRAPHQL_UNAUTHORIZED_ROLE"] || "", HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(), HASURA_GRAPHQL_ADMIN_SECRET: graphqlJson["HASURA_GRAPHQL_ADMIN_SECRET"] || "" }]);
+                    keys = __assign.apply(void 0, [__assign.apply(void 0, [(_a.APP_PORT = _b.sent(), _a.APP_ID = storageInstance.getName(), _a.MAX_UPLOAD_SIZE = 100, _a), minioJson]), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: graphqlJson["HASURA_GRAPHQL_UNAUTHORIZED_ROLE"] || "", HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(), HASURA_GRAPHQL_ADMIN_SECRET: graphqlJson["HASURA_GRAPHQL_ADMIN_SECRET"] || "" }]);
                     Object.keys(keys).map(function (key) {
                         env += "".concat(key, "=\"").concat(keys[key], "\"\n");
                     });

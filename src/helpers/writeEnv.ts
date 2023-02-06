@@ -20,6 +20,7 @@ async function constructEnvFromJson(
   const keys: any = {
     APP_PORT: await containerController.getPortNumber(),
     APP_ID: storageInstance.getName(),
+    MAX_UPLOAD_SIZE: 100,
     ...minioJson,
     HASURA_GRAPHQL_UNAUTHORIZED_ROLE:
       graphqlJson["HASURA_GRAPHQL_UNAUTHORIZED_ROLE"] || "",

@@ -11,6 +11,8 @@ class Locals {
 
     const port = process.env.APP_PORT || "";
     const appId = process.env.APP_ID || "";
+    const maxUploadSize = parseInt(process.env.MAX_UPLOAD_SIZE || "10") || 10;
+    
     const minioConfig = {
       adminEndPoint: process.env.MINIO_ADMIN_END_POINT || "",
       cdnEndPoint: process.env.MINIO_CDN_END_POINT || "",
@@ -33,6 +35,7 @@ class Locals {
     return {
       port,
       appId,
+      maxUploadSize,
       minioConfig,
       hasuraGraphqlUnauthorizedRole,
       hasuraAdminSecret,

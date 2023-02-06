@@ -7,16 +7,16 @@ const express_1 = require("express");
 const multer = require("multer");
 // Others
 const handlers_1 = __importDefault(require("../controllers/storage/handlers"));
+const locals_1 = __importDefault(require("../providers/locals"));
 const router = (0, express_1.Router)();
 /**
  * Authentication routes
  */
 const upload = multer({
     limits: {
-        fileSize: 50 * 1024 * 1024, // 50 Mb
+        fileSize: locals_1.default.config().maxUploadSize * 1024 * 1024, // In Mb
     },
 });
 router.post("/upload", upload.single("file"), handlers_1.default.upload);
 router.get("/get/:id", handlers_1.default.get);
-// router.get("/file/:path", Controller.file); //deprecated api
 exports.default = router;
