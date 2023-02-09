@@ -2,6 +2,11 @@ const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config({ path: path.join(__dirname, "./.env") });
 
+let host = `${process.env.MINIO_ADMIN_END_POINT}`;
+if (process.env.MINIO_PORT !== "443") {
+  host = `${host}:${process.env.MINIO_PORT}`
+}
+
 module.exports = () => [
   {
     "path": "/backend/services/upload",
@@ -14,9 +19,9 @@ module.exports = () => [
   {
     "path": "/backend/services/file/(.*)",
     "host_scheme": process.env.MINIO_PORT === "443" ? "https" : "http",
-    "host": `${process.env.MINIO_ADMIN_END_POINT}:${process.env.MINIO_PORT}`,
+    "host": host,
     "proxy": {
-      "instance": `${process.env.MINIO_ADMIN_END_POINT}:${process.env.MINIO_PORT}`,
+      "instance": host,
       "path": "/$1",
     },
   },

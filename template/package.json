@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsc --project './tsconfig.json' --watch & NODE_ENV=development nodemon dist",
     "build": "tsc",
-    "start": "tsc && node dist",
+    "start": "node dist",
     "lint": "./node_modules/.bin/tslint -c tslint.json 'src/**/*.ts?(x)'"
   },
   "keywords": [],
