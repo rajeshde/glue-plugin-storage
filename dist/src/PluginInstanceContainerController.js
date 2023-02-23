@@ -137,7 +137,7 @@ var PluginInstanceContainerController = (function () {
                         if (_this.portNumber) {
                             return resolve(_this.portNumber);
                         }
-                        var port = 9090;
+                        var port = 9000;
                         _this.setPortNumber(port);
                         return resolve(_this.portNumber);
                     })];
