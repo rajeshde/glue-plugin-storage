@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import { join } from "path";
 import { PluginInstance } from "../PluginInstance";
 import { PluginInstanceContainerController } from "../PluginInstanceContainerController";
 import { PluginInstance as GraphqlPluginInstance } from "@gluestack/glue-plugin-graphql/src/PluginInstance";
@@ -16,9 +17,17 @@ async function constructEnvFromJson(
   const containerController: PluginInstanceContainerController =
     storageInstance.getContainerController();
   const graphqlJson = await graphqlInstance.getContainerController().getEnv();
+  let port = "PORT";
+  try {
+    const mappings = require(join(process.cwd(), "router.map.js"))();
+    port = mappings.api || "PORT";
+  } catch (e) {
+    //
+  }
 
   const keys: any = {
     APP_PORT: await containerController.getPortNumber(),
+    APP_BASE_URL: `http://localhost:${port}`,
     APP_ID: storageInstance.getName(),
     MAX_UPLOAD_SIZE: 100,
     ...minioJson,

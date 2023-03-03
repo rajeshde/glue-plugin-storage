@@ -72,9 +72,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.writeEnv = void 0;
 var fs = __importStar(require("fs"));
+var path_1 = require("path");
 function constructEnvFromJson(storageInstance, graphqlInstance) {
     return __awaiter(this, void 0, void 0, function () {
-        var minioJson, env, containerController, graphqlJson, keys;
+        var minioJson, env, containerController, graphqlJson, port, mappings, keys;
         var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
@@ -89,10 +90,17 @@ function constructEnvFromJson(storageInstance, graphqlInstance) {
                     return [4, graphqlInstance.getContainerController().getEnv()];
                 case 2:
                     graphqlJson = _b.sent();
+                    port = "PORT";
+                    try {
+                        mappings = require((0, path_1.join)(process.cwd(), "router.map.js"))();
+                        port = mappings.api || "PORT";
+                    }
+                    catch (e) {
+                    }
                     _a = {};
                     return [4, containerController.getPortNumber()];
                 case 3:
-                    keys = __assign.apply(void 0, [__assign.apply(void 0, [(_a.APP_PORT = _b.sent(), _a.APP_ID = storageInstance.getName(), _a.MAX_UPLOAD_SIZE = 100, _a), minioJson]), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: graphqlJson["HASURA_GRAPHQL_UNAUTHORIZED_ROLE"] || "", HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(), HASURA_GRAPHQL_ADMIN_SECRET: graphqlJson["HASURA_GRAPHQL_ADMIN_SECRET"] || "" }]);
+                    keys = __assign.apply(void 0, [__assign.apply(void 0, [(_a.APP_PORT = _b.sent(), _a.APP_BASE_URL = "http://localhost:".concat(port), _a.APP_ID = storageInstance.getName(), _a.MAX_UPLOAD_SIZE = 100, _a), minioJson]), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: graphqlJson["HASURA_GRAPHQL_UNAUTHORIZED_ROLE"] || "", HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(), HASURA_GRAPHQL_ADMIN_SECRET: graphqlJson["HASURA_GRAPHQL_ADMIN_SECRET"] || "" }]);
                     Object.keys(keys).map(function (key) {
                         env += "".concat(key, "=\"").concat(keys[key], "\"\n");
                     });

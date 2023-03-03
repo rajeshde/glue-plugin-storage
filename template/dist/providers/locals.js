@@ -33,6 +33,7 @@ class Locals {
         dotenv.config({ path: path.join(__dirname, "../../.env") });
         const port = process.env.APP_PORT || "";
         const appId = process.env.APP_ID || "";
+        const appBaseUrl = process.env.APP_BASE_URL || "";
         const maxUploadSize = parseInt(process.env.MAX_UPLOAD_SIZE || "10") || 10;
         const minioConfig = {
             adminEndPoint: process.env.MINIO_ADMIN_END_POINT || "",
@@ -53,6 +54,7 @@ class Locals {
         return {
             port,
             appId,
+            appBaseUrl,
             maxUploadSize,
             minioConfig,
             hasuraGraphqlUnauthorizedRole,

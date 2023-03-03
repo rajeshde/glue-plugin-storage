@@ -9,6 +9,9 @@ if (process.env.MINIO_PORT !== "443") {
 
 module.exports = () => [
   {
+    "server_name": "api"
+  },
+  {
     "path": "/backend/services/upload",
     "size_in_mb": process.env.MAX_UPLOAD_SIZE || 100,
     "proxy": {

@@ -33,7 +33,7 @@ class Get {
         function (err: any, presignedUrl: string) {
           if (err) return res.json({"url": null});
           const url = new URL(presignedUrl);
-          let replacedUrl = `${req.protocol}://${req.get('host')}/backend/${Locals.config().appId}/file${url.pathname}${url.search}`
+          let replacedUrl = `${Locals.config().appBaseUrl}/backend/${Locals.config().appId}/file${url.pathname}${url.search}`
           replacedUrl = replacedUrl.replace("localhost", Locals.config().minioConfig.adminEndPoint)
           replacedUrl = replacedUrl.replace("127.0.0.1", Locals.config().minioConfig.adminEndPoint)
           return res.json({"url": replacedUrl});
