@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const locals_1 = __importDefault(require("./locals"));
 const routes_1 = __importDefault(require("./routes"));
+const cors = require("cors");
 class Express {
     /**
      * Initialize the express server
@@ -30,6 +31,7 @@ class Express {
      * Mounts all the defined routes
      */
     mountRoutes() {
+        this.express.use(cors({}));
         this.express.use(express_1.default.json());
         this.express = routes_1.default.storage(this.express);
     }
