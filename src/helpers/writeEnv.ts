@@ -3,6 +3,7 @@ import { join } from "path";
 import { PluginInstance } from "../PluginInstance";
 import { PluginInstanceContainerController } from "../PluginInstanceContainerController";
 import { PluginInstance as GraphqlPluginInstance } from "@gluestack/glue-plugin-graphql/src/PluginInstance";
+import { getCrossEnvKey } from "@gluestack/helpers";
 
 async function constructEnvFromJson(
   storageInstance: PluginInstance,
@@ -16,7 +17,6 @@ async function constructEnvFromJson(
   //@ts-ignore
   const containerController: PluginInstanceContainerController =
     storageInstance.getContainerController();
-  const graphqlJson = await graphqlInstance.getContainerController().getEnv();
   let port = "PORT";
   try {
     const mappings = require(join(process.cwd(), "router.map.js"))();
@@ -31,11 +31,15 @@ async function constructEnvFromJson(
     APP_ID: storageInstance.getName(),
     MAX_UPLOAD_SIZE: 100,
     ...minioJson,
-    HASURA_GRAPHQL_UNAUTHORIZED_ROLE:
-      graphqlJson["HASURA_GRAPHQL_UNAUTHORIZED_ROLE"] || "",
+    HASURA_GRAPHQL_UNAUTHORIZED_ROLE: getEnvKey(
+      graphqlInstance,
+      "HASURA_GRAPHQL_UNAUTHORIZED_ROLE",
+    ),
     HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(),
-    HASURA_GRAPHQL_ADMIN_SECRET:
-      graphqlJson["HASURA_GRAPHQL_ADMIN_SECRET"] || "",
+    HASURA_GRAPHQL_ADMIN_SECRET: getEnvKey(
+      graphqlInstance,
+      "HASURA_GRAPHQL_ADMIN_SECRET",
+    ),
   };
 
   Object.keys(keys).map((key) => {
@@ -54,4 +58,8 @@ export async function writeEnv(
     path,
     await constructEnvFromJson(storageInstance, graphqlInstance),
   );
+}
+
+function getEnvKey(graphqlInstance: GraphqlPluginInstance, key: string) {
+  return `%${getCrossEnvKey(graphqlInstance.getName(), key)}%`;
 }
