@@ -27,7 +27,7 @@ async function constructEnvFromJson(
 
   const keys: any = {
     APP_PORT: await containerController.getPortNumber(),
-    APP_BASE_URL: `http://localhost:${port}`,
+    APP_BASE_URL: `%ENDPOINT_API%`,
     APP_ID: storageInstance.getName(),
     MAX_UPLOAD_SIZE: 100,
     ...minioJson,
