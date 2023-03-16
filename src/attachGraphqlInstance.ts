@@ -41,6 +41,73 @@ async function selectGraphqlInstance(graphqlInstances: IInstance[]) {
   return value;
 }
 
+async function getMiddlwareConfig() {
+  let input: any = {};
+  const choices = [
+    {
+      title: "No auth",
+      description: "No authentication required.",
+      value: "no-auth",
+    },
+    {
+      title: "Shared token auth",
+      description: "Shared key based authentication.",
+      value: "shared-token",
+    },
+    {
+      title: "JWT auth",
+      description: "JWT token based authentication.",
+      value: "jwt-auth",
+    },
+    {
+      title: "Webhook auth",
+      description: "Webhook mode for authentication by specifying a URL.",
+      value: "webhook-auth",
+    },
+  ];
+  const { value } = await prompts({
+    type: "select",
+    name: "value",
+    message: "Select private files authentication method",
+    choices: choices,
+  });
+
+  const defaultOptions = {
+    sharedToken: "shared-secret",
+    webhookUrl: "https://<your-custom-webhook-url>/",
+  };
+
+  let key = defaultOptions.sharedToken;
+  let url = defaultOptions.webhookUrl;
+
+  input.MIDDLEWARE_USE = value;
+
+  if (value === "shared-token") {
+    const response = await prompts({
+      type: "text",
+      name: "key",
+      message: "What would be your shared key?",
+      initial: defaultOptions.sharedToken,
+    });
+    key = response.key;
+  }
+
+  if (value === "webhook-auth") {
+    const response = await prompts({
+      type: "text",
+      name: "url",
+      message: "What would be your webhook URL?",
+      initial: defaultOptions.webhookUrl,
+    });
+    url = response.url;
+  }
+
+  input.MIDDLEWARE_SHARED_SECRET = key || defaultOptions.sharedToken;
+  input.MIDDLEWARE_WEBHOOK_URL = url || defaultOptions.webhookUrl;
+
+  return input;
+}
+
 export async function attachGraphqlInstance(
   storageInstance: PluginInstance,
   graphqlInstances: GraphqlPluginInstance[],
@@ -51,7 +118,9 @@ export async function attachGraphqlInstance(
   if (graphqlInstance) {
     await setGraphqlConfig(storageInstance, graphqlInstance);
 
-    await writeEnv(storageInstance, graphqlInstance);
+    const input = await getMiddlwareConfig();
+
+    await writeEnv(storageInstance, graphqlInstance, input);
 
     await copyToGraphql(storageInstance, graphqlInstance);
 

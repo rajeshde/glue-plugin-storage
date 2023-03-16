@@ -79,30 +79,108 @@ function selectGraphqlInstance(graphqlInstances) {
         });
     });
 }
+function getMiddlwareConfig() {
+    return __awaiter(this, void 0, void 0, function () {
+        var input, choices, value, defaultOptions, key, url, response, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    input = {};
+                    choices = [
+                        {
+                            title: "No auth",
+                            description: "No authentication required.",
+                            value: "no-auth"
+                        },
+                        {
+                            title: "Shared token auth",
+                            description: "Shared key based authentication.",
+                            value: "shared-token"
+                        },
+                        {
+                            title: "JWT auth",
+                            description: "JWT token based authentication.",
+                            value: "jwt-auth"
+                        },
+                        {
+                            title: "Webhook auth",
+                            description: "Webhook mode for authentication by specifying a URL.",
+                            value: "webhook-auth"
+                        },
+                    ];
+                    return [4, prompts({
+                            type: "select",
+                            name: "value",
+                            message: "Select private files authentication method",
+                            choices: choices
+                        })];
+                case 1:
+                    value = (_a.sent()).value;
+                    defaultOptions = {
+                        sharedToken: "shared-secret",
+                        webhookUrl: "https://<your-custom-webhook-url>/"
+                    };
+                    key = defaultOptions.sharedToken;
+                    url = defaultOptions.webhookUrl;
+                    input.MIDDLEWARE_USE = value;
+                    if (!(value === "shared-token")) return [3, 3];
+                    return [4, prompts({
+                            type: "text",
+                            name: "key",
+                            message: "What would be your shared key?",
+                            initial: defaultOptions.sharedToken
+                        })];
+                case 2:
+                    response = _a.sent();
+                    key = response.key;
+                    _a.label = 3;
+                case 3:
+                    if (!(value === "webhook-auth")) return [3, 5];
+                    return [4, prompts({
+                            type: "text",
+                            name: "url",
+                            message: "What would be your webhook URL?",
+                            initial: defaultOptions.webhookUrl
+                        })];
+                case 4:
+                    response = _a.sent();
+                    url = response.url;
+                    _a.label = 5;
+                case 5:
+                    input.MIDDLEWARE_SHARED_SECRET = key || defaultOptions.sharedToken;
+                    input.MIDDLEWARE_WEBHOOK_URL = url || defaultOptions.webhookUrl;
+                    return [2, input];
+            }
+        });
+    });
+}
 function attachGraphqlInstance(storageInstance, graphqlInstances) {
     return __awaiter(this, void 0, void 0, function () {
-        var graphqlInstance, routerFilePath;
+        var graphqlInstance, input, routerFilePath;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4, selectGraphqlInstance(graphqlInstances)];
                 case 1:
                     graphqlInstance = _a.sent();
-                    if (!graphqlInstance) return [3, 6];
+                    if (!graphqlInstance) return [3, 7];
                     return [4, (0, exports.setGraphqlConfig)(storageInstance, graphqlInstance)];
                 case 2:
                     _a.sent();
-                    return [4, (0, writeEnv_1.writeEnv)(storageInstance, graphqlInstance)];
+                    return [4, getMiddlwareConfig()];
                 case 3:
+                    input = _a.sent();
+                    return [4, (0, writeEnv_1.writeEnv)(storageInstance, graphqlInstance, input)];
+                case 4:
                     _a.sent();
                     return [4, (0, copyToGraphql_1.copyToGraphql)(storageInstance, graphqlInstance)];
-                case 4:
+                case 5:
                     _a.sent();
                     routerFilePath = "".concat(storageInstance.getInstallationPath(), "/router.js");
                     return [4, (0, reWriteFile_1["default"])(routerFilePath, removeSpecialChars(storageInstance.getName()), "services")];
-                case 5:
+                case 6:
                     _a.sent();
-                    _a.label = 6;
-                case 6: return [2];
+                    _a.label = 7;
+                case 7: return [2];
             }
         });
     });

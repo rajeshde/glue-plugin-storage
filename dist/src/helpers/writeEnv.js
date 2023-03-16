@@ -74,7 +74,7 @@ exports.writeEnv = void 0;
 var fs = __importStar(require("fs"));
 var path_1 = require("path");
 var helpers_1 = require("@gluestack/helpers");
-function constructEnvFromJson(storageInstance, graphqlInstance) {
+function constructEnvFromJson(storageInstance, graphqlInstance, input) {
     return __awaiter(this, void 0, void 0, function () {
         var minioJson, env, containerController, port, mappings, keys;
         var _a;
@@ -98,7 +98,7 @@ function constructEnvFromJson(storageInstance, graphqlInstance) {
                     _a = {};
                     return [4, containerController.getPortNumber()];
                 case 2:
-                    keys = __assign.apply(void 0, [__assign.apply(void 0, [(_a.APP_PORT = _b.sent(), _a.APP_BASE_URL = "%ENDPOINT_API%", _a.APP_ID = storageInstance.getName(), _a.MAX_UPLOAD_SIZE = 100, _a), minioJson]), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: getEnvKey(graphqlInstance, "HASURA_GRAPHQL_UNAUTHORIZED_ROLE"), HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(), HASURA_GRAPHQL_ADMIN_SECRET: getEnvKey(graphqlInstance, "HASURA_GRAPHQL_ADMIN_SECRET") }]);
+                    keys = __assign.apply(void 0, [__assign.apply(void 0, [__assign.apply(void 0, [(_a.APP_PORT = _b.sent(), _a.APP_BASE_URL = "%ENDPOINT_API%", _a.APP_ID = storageInstance.getName(), _a.MAX_UPLOAD_SIZE = 100, _a), minioJson]), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: getEnvKey(graphqlInstance, "HASURA_GRAPHQL_UNAUTHORIZED_ROLE"), HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(), HASURA_GRAPHQL_ADMIN_SECRET: getEnvKey(graphqlInstance, "HASURA_GRAPHQL_ADMIN_SECRET") }]), input]);
                     Object.keys(keys).map(function (key) {
                         env += "".concat(key, "=\"").concat(keys[key], "\"\n");
                     });
@@ -107,7 +107,7 @@ function constructEnvFromJson(storageInstance, graphqlInstance) {
         });
     });
 }
-function writeEnv(storageInstance, graphqlInstance) {
+function writeEnv(storageInstance, graphqlInstance, input) {
     return __awaiter(this, void 0, void 0, function () {
         var path, _a, _b, _c;
         return __generator(this, function (_d) {
@@ -116,7 +116,7 @@ function writeEnv(storageInstance, graphqlInstance) {
                     path = "".concat(storageInstance.getInstallationPath(), "/.env");
                     _b = (_a = fs).writeFileSync;
                     _c = [path];
-                    return [4, constructEnvFromJson(storageInstance, graphqlInstance)];
+                    return [4, constructEnvFromJson(storageInstance, graphqlInstance, input)];
                 case 1:
                     _b.apply(_a, _c.concat([_d.sent()]));
                     return [2];

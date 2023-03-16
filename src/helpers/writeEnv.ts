@@ -8,6 +8,7 @@ import { getCrossEnvKey } from "@gluestack/helpers";
 async function constructEnvFromJson(
   storageInstance: PluginInstance,
   graphqlInstance: GraphqlPluginInstance,
+  input: any
 ) {
   const minioJson = await storageInstance
     .getMinioInstance()
@@ -40,6 +41,7 @@ async function constructEnvFromJson(
       graphqlInstance,
       "HASURA_GRAPHQL_ADMIN_SECRET",
     ),
+    ...input
   };
 
   Object.keys(keys).map((key) => {
@@ -52,11 +54,12 @@ async function constructEnvFromJson(
 export async function writeEnv(
   storageInstance: PluginInstance,
   graphqlInstance: GraphqlPluginInstance,
+  input: any
 ) {
   const path = `${storageInstance.getInstallationPath()}/.env`;
   fs.writeFileSync(
     path,
-    await constructEnvFromJson(storageInstance, graphqlInstance),
+    await constructEnvFromJson(storageInstance, graphqlInstance, input),
   );
 }
 
