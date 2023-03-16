@@ -4,16 +4,17 @@ import { PluginInstance } from "../PluginInstance";
 import { PluginInstanceContainerController } from "../PluginInstanceContainerController";
 import { PluginInstance as GraphqlPluginInstance } from "@gluestack/glue-plugin-graphql/src/PluginInstance";
 import { getCrossEnvKey } from "@gluestack/helpers";
+import { PluginInstance as MinioPluginInstance } from "@gluestack/glue-plugin-minio/src/PluginInstance";
 
 async function constructEnvFromJson(
   storageInstance: PluginInstance,
   graphqlInstance: GraphqlPluginInstance,
   input: any
 ) {
-  const minioJson = await storageInstance
+  const minioJson = Object.keys(await storageInstance
     .getMinioInstance()
     .getContainerController()
-    .getEnv();
+    .getEnv());
   let env = "";
   //@ts-ignore
   const containerController: PluginInstanceContainerController =
@@ -25,13 +26,17 @@ async function constructEnvFromJson(
   } catch (e) {
     //
   }
+  let minioKeys: any = {};
+  for (const key of minioJson) {
+    minioKeys[key] = getEnvKey(storageInstance.getMinioInstance(), key)
+  }
 
   const keys: any = {
     APP_PORT: await containerController.getPortNumber(),
     APP_BASE_URL: `%ENDPOINT_API%`,
     APP_ID: storageInstance.getName(),
     MAX_UPLOAD_SIZE: 100,
-    ...minioJson,
+    ...minioKeys,
     HASURA_GRAPHQL_UNAUTHORIZED_ROLE: getEnvKey(
       graphqlInstance,
       "HASURA_GRAPHQL_UNAUTHORIZED_ROLE",
@@ -63,6 +68,6 @@ export async function writeEnv(
   );
 }
 
-function getEnvKey(graphqlInstance: GraphqlPluginInstance, key: string) {
-  return `%${getCrossEnvKey(graphqlInstance.getName(), key)}%`;
+function getEnvKey(instance: MinioPluginInstance | GraphqlPluginInstance, key: string) {
+  return `%${getCrossEnvKey(instance.getName(), key)}%`;
 }

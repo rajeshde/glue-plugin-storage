@@ -76,16 +76,18 @@ var path_1 = require("path");
 var helpers_1 = require("@gluestack/helpers");
 function constructEnvFromJson(storageInstance, graphqlInstance, input) {
     return __awaiter(this, void 0, void 0, function () {
-        var minioJson, env, containerController, port, mappings, keys;
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0: return [4, storageInstance
-                        .getMinioInstance()
-                        .getContainerController()
-                        .getEnv()];
+        var minioJson, _a, _b, env, containerController, port, mappings, minioKeys, _i, minioJson_1, key, keys;
+        var _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0:
+                    _b = (_a = Object).keys;
+                    return [4, storageInstance
+                            .getMinioInstance()
+                            .getContainerController()
+                            .getEnv()];
                 case 1:
-                    minioJson = _b.sent();
+                    minioJson = _b.apply(_a, [_d.sent()]);
                     env = "";
                     containerController = storageInstance.getContainerController();
                     port = "PORT";
@@ -95,10 +97,15 @@ function constructEnvFromJson(storageInstance, graphqlInstance, input) {
                     }
                     catch (e) {
                     }
-                    _a = {};
+                    minioKeys = {};
+                    for (_i = 0, minioJson_1 = minioJson; _i < minioJson_1.length; _i++) {
+                        key = minioJson_1[_i];
+                        minioKeys[key] = getEnvKey(storageInstance.getMinioInstance(), key);
+                    }
+                    _c = {};
                     return [4, containerController.getPortNumber()];
                 case 2:
-                    keys = __assign.apply(void 0, [__assign.apply(void 0, [__assign.apply(void 0, [(_a.APP_PORT = _b.sent(), _a.APP_BASE_URL = "%ENDPOINT_API%", _a.APP_ID = storageInstance.getName(), _a.MAX_UPLOAD_SIZE = 100, _a), minioJson]), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: getEnvKey(graphqlInstance, "HASURA_GRAPHQL_UNAUTHORIZED_ROLE"), HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(), HASURA_GRAPHQL_ADMIN_SECRET: getEnvKey(graphqlInstance, "HASURA_GRAPHQL_ADMIN_SECRET") }]), input]);
+                    keys = __assign.apply(void 0, [__assign.apply(void 0, [__assign.apply(void 0, [(_c.APP_PORT = _d.sent(), _c.APP_BASE_URL = "%ENDPOINT_API%", _c.APP_ID = storageInstance.getName(), _c.MAX_UPLOAD_SIZE = 100, _c), minioKeys]), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: getEnvKey(graphqlInstance, "HASURA_GRAPHQL_UNAUTHORIZED_ROLE"), HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(), HASURA_GRAPHQL_ADMIN_SECRET: getEnvKey(graphqlInstance, "HASURA_GRAPHQL_ADMIN_SECRET") }]), input]);
                     Object.keys(keys).map(function (key) {
                         env += "".concat(key, "=\"").concat(keys[key], "\"\n");
                     });
@@ -125,7 +132,7 @@ function writeEnv(storageInstance, graphqlInstance, input) {
     });
 }
 exports.writeEnv = writeEnv;
-function getEnvKey(graphqlInstance, key) {
-    return "%".concat((0, helpers_1.getCrossEnvKey)(graphqlInstance.getName(), key), "%");
+function getEnvKey(instance, key) {
+    return "%".concat((0, helpers_1.getCrossEnvKey)(instance.getName(), key), "%");
 }
 //# sourceMappingURL=writeEnv.js.map
