@@ -51,6 +51,15 @@ class Locals {
         const hasuraGraphqlUnauthorizedRole = process.env.HASURA_GRAPHQL_UNAUTHORIZED_ROLE || "";
         const hasuraGraphqlURL = process.env.HASURA_GRAPHQL_URL || "";
         const hasuraAdminSecret = process.env.HASURA_GRAPHQL_ADMIN_SECRET || "";
+        const middleware = {
+            shared: {
+                secret: process.env.MIDDLEWARE_SHARED_SECRET || "",
+            },
+            webhook: {
+                url: process.env.MIDDLEWARE_WEBHOOK_URL || "",
+            },
+            use: process.env.MIDDLEWARE_USE || "no-auth",
+        };
         return {
             port,
             appId,
@@ -60,6 +69,7 @@ class Locals {
             hasuraGraphqlUnauthorizedRole,
             hasuraAdminSecret,
             hasuraGraphqlURL,
+            middleware,
         };
     }
     /**

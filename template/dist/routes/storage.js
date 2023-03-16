@@ -8,6 +8,7 @@ const multer = require("multer");
 // Others
 const handlers_1 = __importDefault(require("../controllers/storage/handlers"));
 const locals_1 = __importDefault(require("../providers/locals"));
+const middlewares_1 = __importDefault(require("../middlewares"));
 const router = (0, express_1.Router)();
 /**
  * Authentication routes
@@ -18,5 +19,5 @@ const upload = multer({
     },
 });
 router.post("/upload", upload.single("file"), handlers_1.default.upload);
-router.get("/get/:id", handlers_1.default.get);
+router.get("/get/:id", middlewares_1.default, handlers_1.default.get);
 exports.default = router;

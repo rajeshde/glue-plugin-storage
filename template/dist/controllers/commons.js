@@ -38,6 +38,26 @@ class Commons {
         });
     }
     /**
+     * Graphql request
+     */
+    AuthGQLRequest({ variables, query, token }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const headers = {
+                "content-type": "application/json",
+                Authorization: `Bearer ${token}`,
+            };
+            return yield this.axios({
+                url: `${locals_1.default.config().hasuraGraphqlURL}`,
+                method: "POST",
+                headers: headers,
+                data: {
+                    query,
+                    variables,
+                },
+            });
+        });
+    }
+    /**
      * Server response
      */
     Response(res, success, message, data) {
