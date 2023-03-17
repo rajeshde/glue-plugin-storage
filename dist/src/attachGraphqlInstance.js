@@ -95,7 +95,7 @@ function getMiddlwareConfig() {
                         {
                             title: "Shared token auth",
                             description: "Shared key based authentication.",
-                            value: "shared-token"
+                            value: "shared-token-auth"
                         },
                         {
                             title: "JWT auth",
@@ -123,7 +123,7 @@ function getMiddlwareConfig() {
                     key = defaultOptions.sharedToken;
                     url = defaultOptions.webhookUrl;
                     input.MIDDLEWARE_USE = value;
-                    if (!(value === "shared-token")) return [3, 3];
+                    if (!(value === "shared-token-auth")) return [3, 3];
                     return [4, prompts({
                             type: "text",
                             name: "key",

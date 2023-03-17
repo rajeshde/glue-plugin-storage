@@ -52,7 +52,7 @@ async function getMiddlwareConfig() {
     {
       title: "Shared token auth",
       description: "Shared key based authentication.",
-      value: "shared-token",
+      value: "shared-token-auth",
     },
     {
       title: "JWT auth",
@@ -82,7 +82,7 @@ async function getMiddlwareConfig() {
 
   input.MIDDLEWARE_USE = value;
 
-  if (value === "shared-token") {
+  if (value === "shared-token-auth") {
     const response = await prompts({
       type: "text",
       name: "key",
