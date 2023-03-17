@@ -41,7 +41,10 @@ async function constructEnvFromJson(
       graphqlInstance,
       "HASURA_GRAPHQL_UNAUTHORIZED_ROLE",
     ),
-    HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(),
+    HASURA_GRAPHQL_URL: getEnvKey(
+      graphqlInstance,
+      "GRAPHQL_URL",
+    ),
     HASURA_GRAPHQL_ADMIN_SECRET: getEnvKey(
       graphqlInstance,
       "HASURA_GRAPHQL_ADMIN_SECRET",

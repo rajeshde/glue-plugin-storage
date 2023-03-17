@@ -105,7 +105,7 @@ function constructEnvFromJson(storageInstance, graphqlInstance, input) {
                     _c = {};
                     return [4, containerController.getPortNumber()];
                 case 2:
-                    keys = __assign.apply(void 0, [__assign.apply(void 0, [__assign.apply(void 0, [(_c.APP_PORT = _d.sent(), _c.APP_BASE_URL = "%ENDPOINT_API%", _c.APP_ID = storageInstance.getName(), _c.MAX_UPLOAD_SIZE = 100, _c), minioKeys]), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: getEnvKey(graphqlInstance, "HASURA_GRAPHQL_UNAUTHORIZED_ROLE"), HASURA_GRAPHQL_URL: graphqlInstance.getGraphqlURL(), HASURA_GRAPHQL_ADMIN_SECRET: getEnvKey(graphqlInstance, "HASURA_GRAPHQL_ADMIN_SECRET") }]), input]);
+                    keys = __assign.apply(void 0, [__assign.apply(void 0, [__assign.apply(void 0, [(_c.APP_PORT = _d.sent(), _c.APP_BASE_URL = "%ENDPOINT_API%", _c.APP_ID = storageInstance.getName(), _c.MAX_UPLOAD_SIZE = 100, _c), minioKeys]), { HASURA_GRAPHQL_UNAUTHORIZED_ROLE: getEnvKey(graphqlInstance, "HASURA_GRAPHQL_UNAUTHORIZED_ROLE"), HASURA_GRAPHQL_URL: getEnvKey(graphqlInstance, "GRAPHQL_URL"), HASURA_GRAPHQL_ADMIN_SECRET: getEnvKey(graphqlInstance, "HASURA_GRAPHQL_ADMIN_SECRET") }]), input]);
                     Object.keys(keys).map(function (key) {
                         env += "".concat(key, "=\"").concat(keys[key], "\"\n");
                     });
